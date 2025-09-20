@@ -1,0 +1,3611 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="HE Yunye">
+      
+      
+      
+        <link rel="prev" href="../03_Data_formats/">
+      
+      
+        <link rel="next" href="../05_PCA/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>Genotype Data QC - GWASTutorial</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e53b48f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#plink-basics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="GWASTutorial" class="md-header__button md-logo" aria-label="GWASTutorial" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GWASTutorial
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Genotype Data QC
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Cloufield/GWASTutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
+  
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../02_Linux_basics/" class="md-tabs__link">
+          
+  
+  
+  Command Line
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01_Dataset/" class="md-tabs__link">
+          
+  
+  
+  Pre-GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../06_Association_tests/" class="md-tabs__link">
+          
+  
+  
+  GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../07_Annotation/" class="md-tabs__link">
+          
+  
+  
+  Post-GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../19_ld/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../95_Assignment/" class="md-tabs__link">
+          
+  
+  
+  Assignments
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="GWASTutorial" class="md-nav__button md-logo" aria-label="GWASTutorial" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    GWASTutorial
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Cloufield/GWASTutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Home
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tutorial guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../99_About/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Command Line
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Command Line
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_Linux_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../82_windows_linux_subsystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows Linux Subsystem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../84_ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SSH
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../85_job_scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Job scheduler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../60_awk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text editing - awk
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../61_sed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text editing - sed
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../69_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Python
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../70_python_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../71_python_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../80_miniconda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anaconda
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../81_jupyter_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Jupyter notebook
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    R
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            R
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../75_R_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    R Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../76_R_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    R Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Other tools
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Other tools
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../83_git_and_github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Git and github
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pre-GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Pre-GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_Dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample Dataset
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_Data_formats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Formats
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Genotype Data QC
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Genotype Data QC
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plink-192-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      PLINK 1.9&amp;2 installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-plink19-and-plink2-and-then-unzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download PLINK1.9 and PLINK2 and then unzip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-symbolic-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create symbolic links
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-paths-to-the-environment-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add paths to the environment path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-genotype-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download genotype data
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plink-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      PLINK tutorial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PLINK tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qc-step-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      QC Step Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missing-rate-call-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Missing rate (call rate)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plink-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      PLINK syntax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allele-frequency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allele Frequency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hardy-weinberg-equilibrium-exact-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hardy-Weinberg equilibrium exact test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applying-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Applying filters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-pruning" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD Pruning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inbreeding-f-coefficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inbreeding F coefficient
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-snp-filtering-extractexcludekeepremove" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sample &amp; SNP filtering (extract/exclude/keep/remove)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ibd-pi_hat-kinship-coefficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      IBD / PI_HAT / kinship coefficient
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD calculation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-management-make-bedrecode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data management (make-bed/recode)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apply-all-the-filters-to-obtain-a-clean-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Apply all the filters to obtain a clean dataset
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-common-qc-steps-not-included-in-this-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other common QC steps not included in this tutorial
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exercise
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional resources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_PCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot_PCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotting PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Phasing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phasing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Imputation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Imputation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_Association_tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Association tests by PLINK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Visualization by gwaslab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33_linear_mixed_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linear mixed model (LMM)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32_whole_genome_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Whole genome regression by REGENIE
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Post-GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Post-GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_Annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Annotation by ANNOVAR & VEP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_gcta_greml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SNP-heritability estimation by GREML
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_LDSC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LD score regression by LDSC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_Gene_based_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gene/Gene-set tests by MAGMA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Fine-mapping by susieR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            Fine-mapping by susieR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_fine_mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fine-mapping Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finemapping_susie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Finemapping using susieR
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_meta_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Meta-analysis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Polygenic Risk Score
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            Polygenic Risk Score
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_PRS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PRS_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prs_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Mendelian randomization
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_8">
+            <span class="md-nav__icon md-icon"></span>
+            Mendelian randomization
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_mendelian_randomization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MR Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TwoSampleMR/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TwoSampleMR Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18_Conditioning_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional analysis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17_colocalization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colocalization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21_twas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TWAS (using FUSION)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Topics
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Topics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19_ld/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linkage Disequilibrium (LD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_heritability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Heritability Concepts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20_power_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Statistical power
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_winners_curse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Winner's curse
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../55_measure_of_effect/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Measure of effect
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../90_Recommended_Reading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recommended reading
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Assignments
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Assignments
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../95_Assignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assignment - 1KG PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../96_Assignment2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assignment - Presentation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plink-192-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      PLINK 1.9&amp;2 installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-plink19-and-plink2-and-then-unzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download PLINK1.9 and PLINK2 and then unzip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-symbolic-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create symbolic links
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-paths-to-the-environment-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add paths to the environment path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-genotype-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download genotype data
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plink-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      PLINK tutorial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PLINK tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qc-step-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      QC Step Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missing-rate-call-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Missing rate (call rate)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plink-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      PLINK syntax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allele-frequency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allele Frequency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hardy-weinberg-equilibrium-exact-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hardy-Weinberg equilibrium exact test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applying-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Applying filters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-pruning" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD Pruning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inbreeding-f-coefficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inbreeding F coefficient
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-snp-filtering-extractexcludekeepremove" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sample &amp; SNP filtering (extract/exclude/keep/remove)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ibd-pi_hat-kinship-coefficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      IBD / PI_HAT / kinship coefficient
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD calculation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-management-make-bedrecode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data management (make-bed/recode)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apply-all-the-filters-to-obtain-a-clean-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Apply all the filters to obtain a clean dataset
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-common-qc-steps-not-included-in-this-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other common QC steps not included in this tutorial
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exercise
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional resources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="plink-basics">PLINK basics</h1>
+<p>In this module, we will learn the basics of genotype data QC using PLINK, which is one of the most commonly used software in complex trait genomics. (Huge thanks to the developers: <a href="https://www.cog-genomics.org/plink/1.9/credits">PLINK1.9</a> and <a href="https://www.cog-genomics.org/plink/2.0/credits">PLINK2</a>)</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#preparation">Preparation</a><ul>
+<li><a href="#plink-192-installation">PLINK 1.9 &amp; 2 installation</a></li>
+<li><a href="#download-genotype-data">Download genotype data</a></li>
+</ul>
+</li>
+<li><a href="#plink-tutorial">PLINK tutorial</a><ul>
+<li><a href="#missing-rate-call-rate">Calculate the missing rate and call rate</a></li>
+<li><a href="#allele-frequency">Calculate allele frequency</a></li>
+<li><a href="#hardy-weinberg-equilibrium-exact-test">Hardy-Weinberg equilibrium exact test</a></li>
+<li><a href="#applying-filters">Applying filters</a></li>
+<li><a href="#LD-pruning">LD-Pruning</a></li>
+<li><a href="#inbreeding-f-coefficient">Calculate the inbreeding F coefficient </a></li>
+<li><a href="#sample--snp-filtering-extractexcludekeepremove">Sample &amp; SNP filtering (extract/exclude/keep/remove)</a></li>
+<li><a href="#ld-calculation">LD calculation</a></li>
+<li><a href="#ibd--pi_hat--kinship-coefficient">Estimate IBD / PI_HAT</a></li>
+<li><a href="#data-management-make-bedrecode">Data management (make-bed/recode)</a></li>
+<li><a href="#apply-all-the-filters-to-obtain-a-clean-dataset">Apply all the filters to obtain a clean dataset</a></li>
+<li><a href="#other-common-qc-steps-not-included-in-this-tutorial">Other common QC steps not included in this tutorial</a></li>
+</ul>
+</li>
+<li><a href="#exercise">Exercise</a></li>
+<li><a href="#additional-resources">Additional resources</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h2 id="preparation">Preparation</h2>
+<h3 id="plink-192-installation">PLINK 1.9&amp;2 installation</h3>
+<p>To get prepared for genotype QC, we will need to make directories, download software and add the software to your environment path.</p>
+<p>First, we will simply create some directories to keep the tools we need to use.</p>
+<div class="admonition example">
+<p class="admonition-title">Create directories</p>
+<p><div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~
+mkdir<span class="w"> </span>tools
+<span class="nb">cd</span><span class="w"> </span>tools
+mkdir<span class="w"> </span>bin
+mkdir<span class="w"> </span>plink
+mkdir<span class="w"> </span>plink2
+</code></pre></div>
+<img width="937" alt="image" src="https://user-images.githubusercontent.com/40289485/160745597-c6f4204a-d786-4af1-9041-f1531cbbe584.png"></p>
+</div>
+<p>You can download each tool into its corresponding directories. </p>
+<p>The <code>bin</code> directory here is for keeping all the symbolic links to the executable files of each tool. </p>
+<p>In this way, it is much easier to manage and organize the paths and tools. We will only add the <code>bin</code> directory here to the environment path.</p>
+<h3 id="download-plink19-and-plink2-and-then-unzip">Download PLINK1.9 and PLINK2 and then unzip</h3>
+<p>Next, go to the Plink webpage to download the software. We will need both PLINK1.9 and PLINK2.</p>
+<p>Download PLINK1.9 and PLINK2 from the following webpage to the corresponding directories:</p>
+<ul>
+<li>PLINK1.9 : <a href="https://www.cog-genomics.org/plink/">https://www.cog-genomics.org/plink/</a></li>
+<li>PLINK2 : <a href="https://www.cog-genomics.org/plink/2.0/">https://www.cog-genomics.org/plink/2.0/</a></li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>If you are using Mac or Windows, then please download the Mac or Windows version. In this tutorial, we will use a Linux system and the Linux version of PLINK. </p>
+</div>
+<p>Find the suitable version on the PLINK website, right-click and copy the link address.</p>
+<div class="admonition example">
+<p class="admonition-title">Download PLINK2 (Linux AVX2 AMD)</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/tools/plink2
+wget<span class="w"> </span>https://s3.amazonaws.com/plink2-assets/alpha5/plink2_linux_amd_avx2_20231212.zip
+unzip<span class="w"> </span>plink2_linux_amd_avx2_20231212.zip
+</code></pre></div>
+</div>
+<p>Then do the same for PLINK1.9</p>
+<div class="admonition example">
+<p class="admonition-title">Download PLINK1.9 (Linux 64-bit)</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/tools/plink
+wget<span class="w"> </span>https://s3.amazonaws.com/plink1-assets/plink_linux_x86_64_20231211.zip
+unzip<span class="w"> </span>plink_linux_x86_64_20231211.zip
+</code></pre></div>
+</div>
+<h3 id="create-symbolic-links">Create symbolic links</h3>
+<p>After downloading and unzipping, we will create symbolic links for the plink binary files, and then move the link to <code>~/tools/bin/</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Create symbolic links</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~
+ln<span class="w"> </span>-s<span class="w"> </span>~/tools/plink2/plink2<span class="w"> </span>~/tools/bin/plink2
+ln<span class="w"> </span>-s<span class="w"> </span>~/tools/plink/plink<span class="w"> </span>~/tools/bin/plink
+</code></pre></div>
+</div>
+<h3 id="add-paths-to-the-environment-path">Add paths to the environment path</h3>
+<p>Then add <code>~/tools/bin/</code> to the environment path.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:~/tools/bin/
+</code></pre></div>
+This command will add the path to your current shell. </p>
+<p>If you restart the terminal, it will be lost. So you may need to add it to the Bash  configuration file. Then run </p>
+<div class="highlight"><pre><span></span><code>echo &quot;export PATH=$PATH:~/tools/bin/&quot; &gt;&gt; ~/.bashrc
+</code></pre></div>
+<p>This will add a new line at the end of <code>.bashrc</code>, which will be run every time you open a new bash shell.</p>
+</div>
+<p>All done. Let's test if we installed PLINK successfully or not.</p>
+<div class="admonition example">
+<p class="admonition-title">Check if PLINK is installed successfully.</p>
+<div class="highlight"><pre><span></span><code>plink
+PLINK<span class="w"> </span>v1.90b7.2<span class="w"> </span><span class="m">64</span>-bit<span class="w"> </span><span class="o">(</span><span class="m">11</span><span class="w"> </span>Dec<span class="w"> </span><span class="m">2023</span><span class="o">)</span><span class="w">           </span>www.cog-genomics.org/plink/1.9/
+<span class="o">(</span>C<span class="o">)</span><span class="w"> </span><span class="m">2005</span>-2023<span class="w"> </span>Shaun<span class="w"> </span>Purcell,<span class="w"> </span>Christopher<span class="w"> </span>Chang<span class="w">   </span>GNU<span class="w"> </span>General<span class="w"> </span>Public<span class="w"> </span>License<span class="w"> </span>v3
+
+plink<span class="w"> </span>&lt;input<span class="w"> </span>flag<span class="o">(</span>s<span class="o">)</span>...&gt;<span class="w"> </span><span class="o">[</span><span class="nb">command</span><span class="w"> </span>flag<span class="o">(</span>s<span class="o">)</span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>other<span class="w"> </span>flag<span class="o">(</span>s<span class="o">)</span>...<span class="o">]</span>
+plink<span class="w"> </span>--help<span class="w"> </span><span class="o">[</span>flag<span class="w"> </span>name<span class="o">(</span>s<span class="o">)</span>...<span class="o">]</span>
+
+Commands<span class="w"> </span>include<span class="w"> </span>--make-bed,<span class="w"> </span>--recode,<span class="w"> </span>--flip-scan,<span class="w"> </span>--merge-list,
+--write-snplist,<span class="w"> </span>--list-duplicate-vars,<span class="w"> </span>--freqx,<span class="w"> </span>--missing,<span class="w"> </span>--test-mishap,
+--hardy,<span class="w"> </span>--mendel,<span class="w"> </span>--ibc,<span class="w"> </span>--impute-sex,<span class="w"> </span>--indep-pairphase,<span class="w"> </span>--r2,<span class="w"> </span>--show-tags,
+--blocks,<span class="w"> </span>--distance,<span class="w"> </span>--genome,<span class="w"> </span>--homozyg,<span class="w"> </span>--make-rel,<span class="w"> </span>--make-grm-gz,
+--rel-cutoff,<span class="w"> </span>--cluster,<span class="w"> </span>--pca,<span class="w"> </span>--neighbour,<span class="w"> </span>--ibs-test,<span class="w"> </span>--regress-distance,
+--model,<span class="w"> </span>--bd,<span class="w"> </span>--gxe,<span class="w"> </span>--logistic,<span class="w"> </span>--dosage,<span class="w"> </span>--lasso,<span class="w"> </span>--test-missing,
+--make-perm-pheno,<span class="w"> </span>--tdt,<span class="w"> </span>--qfam,<span class="w"> </span>--annotate,<span class="w"> </span>--clump,<span class="w"> </span>--gene-report,
+--meta-analysis,<span class="w"> </span>--epistasis,<span class="w"> </span>--fast-epistasis,<span class="w"> </span>and<span class="w"> </span>--score.
+
+<span class="s2">&quot;plink --help | more&quot;</span><span class="w"> </span>describes<span class="w"> </span>all<span class="w"> </span>functions<span class="w"> </span><span class="o">(</span>warning:<span class="w"> </span>long<span class="o">)</span>.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>plink2
+PLINK<span class="w"> </span>v2.00a5.9LM<span class="w"> </span>AVX2<span class="w"> </span>AMD<span class="w"> </span><span class="o">(</span><span class="m">12</span><span class="w"> </span>Dec<span class="w"> </span><span class="m">2023</span><span class="o">)</span><span class="w">       </span>www.cog-genomics.org/plink/2.0/
+<span class="o">(</span>C<span class="o">)</span><span class="w"> </span><span class="m">2005</span>-2023<span class="w"> </span>Shaun<span class="w"> </span>Purcell,<span class="w"> </span>Christopher<span class="w"> </span>Chang<span class="w">   </span>GNU<span class="w"> </span>General<span class="w"> </span>Public<span class="w"> </span>License<span class="w"> </span>v3
+
+plink2<span class="w"> </span>&lt;input<span class="w"> </span>flag<span class="o">(</span>s<span class="o">)</span>...&gt;<span class="w"> </span><span class="o">[</span><span class="nb">command</span><span class="w"> </span>flag<span class="o">(</span>s<span class="o">)</span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>other<span class="w"> </span>flag<span class="o">(</span>s<span class="o">)</span>...<span class="o">]</span>
+plink2<span class="w"> </span>--help<span class="w"> </span><span class="o">[</span>flag<span class="w"> </span>name<span class="o">(</span>s<span class="o">)</span>...<span class="o">]</span>
+
+Commands<span class="w"> </span>include<span class="w"> </span>--rm-dup<span class="w"> </span>list,<span class="w"> </span>--make-bpgen,<span class="w"> </span>--export,<span class="w"> </span>--freq,<span class="w"> </span>--geno-counts,
+--sample-counts,<span class="w"> </span>--missing,<span class="w"> </span>--hardy,<span class="w"> </span>--het,<span class="w"> </span>--fst,<span class="w"> </span>--indep-pairwise,<span class="w"> </span>--ld,
+--sample-diff,<span class="w"> </span>--make-king,<span class="w"> </span>--king-cutoff,<span class="w"> </span>--pmerge,<span class="w"> </span>--pgen-diff,
+--write-samples,<span class="w"> </span>--write-snplist,<span class="w"> </span>--make-grm-list,<span class="w"> </span>--pca,<span class="w"> </span>--glm,<span class="w"> </span>--adjust-file,
+--gwas-ssf,<span class="w"> </span>--clump,<span class="w"> </span>--score,<span class="w"> </span>--variant-score,<span class="w"> </span>--genotyping-rate,<span class="w"> </span>--pgen-info,
+--validate,<span class="w"> </span>and<span class="w"> </span>--zst-decompress.
+
+<span class="s2">&quot;plink2 --help | more&quot;</span><span class="w"> </span>describes<span class="w"> </span>all<span class="w"> </span>functions.
+</code></pre></div>
+</div>
+<p>Well done. We have successfully installed plink1.9 and plink2.</p>
+<h3 id="download-genotype-data">Download genotype data</h3>
+<p>Next, we need to download the sample genotype data. The way to create the sample data is described [here].(https://cloufield.github.io/GWASTutorial/01_Dataset/)
+This dataset contains 504 EAS individuals from 1000 Genome Project Phase 3v5 with around 1 million variants.</p>
+<p>Simply run <code>download_sampledata.sh</code> in 01_Dataset to download this dataset (from Dropbox). See <a href="https://cloufield.github.io/GWASTutorial/01_Dataset/#genotype-data-processing">here</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Sample dataset is currently hosted on Dropbox which may not be accessible for users in certain regions.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Download sample data</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>../01_Dataset
+./download_sampledata.sh
+</code></pre></div>
+<p>And you will get the following three PLINK files:</p>
+<div class="highlight"><pre><span></span><code>-rw-r--r-- 1 yunye yunye 149M Dec 26 13:25 1KG.EAS.auto.snp.norm.nodup.split.rare002.common015.missing.bed
+-rw-r--r-- 1 yunye yunye  40M Dec 26 13:25 1KG.EAS.auto.snp.norm.nodup.split.rare002.common015.missing.bim
+-rw-r--r-- 1 yunye yunye  13K Dec 26 13:25 1KG.EAS.auto.snp.norm.nodup.split.rare002.common015.missing.fam
+</code></pre></div>
+<p>Check the bim file:</p>
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>1KG.EAS.auto.snp.norm.nodup.split.rare002.common015.missing.bim
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:14930:A:G<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">14930</span><span class="w">   </span>G<span class="w">       </span>A
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:15774:G:A<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">15774</span><span class="w">   </span>A<span class="w">       </span>G
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:15777:A:G<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">15777</span><span class="w">   </span>G<span class="w">       </span>A
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:57292:C:T<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">57292</span><span class="w">   </span>T<span class="w">       </span>C
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:77874:G:A<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">77874</span><span class="w">   </span>A<span class="w">       </span>G
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:87360:C:T<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">87360</span><span class="w">   </span>T<span class="w">       </span>C
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:92917:T:A<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">92917</span><span class="w">   </span>A<span class="w">       </span>T
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:104186:T:C<span class="w">    </span><span class="m">0</span><span class="w">       </span><span class="m">104186</span><span class="w">  </span>T<span class="w">       </span>C
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:125271:C:T<span class="w">    </span><span class="m">0</span><span class="w">       </span><span class="m">125271</span><span class="w">  </span>C<span class="w">       </span>T
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:232449:G:A<span class="w">    </span><span class="m">0</span><span class="w">       </span><span class="m">232449</span><span class="w">  </span>A<span class="w">       </span>G
+</code></pre></div>
+<p>Check the fam file:
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>1KG.EAS.auto.snp.norm.nodup.split.rare002.common015.missing.fam
+HG00403<span class="w"> </span>HG00403<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00404<span class="w"> </span>HG00404<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00406<span class="w"> </span>HG00406<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00407<span class="w"> </span>HG00407<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00409<span class="w"> </span>HG00409<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00410<span class="w"> </span>HG00410<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00419<span class="w"> </span>HG00419<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00421<span class="w"> </span>HG00421<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00422<span class="w"> </span>HG00422<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+HG00428<span class="w"> </span>HG00428<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-9
+</code></pre></div></p>
+</div>
+<h2 id="plink-tutorial">PLINK tutorial</h2>
+<p>Detailed descriptions can be found on plink's website: <a href="https://www.cog-genomics.org/plink/1.9/">PLINK1.9</a> and <a href="https://www.cog-genomics.org/plink/2.0/">PLINK2</a>.</p>
+<p>The functions we will learn in this tutorial:</p>
+<ol>
+<li>Calculating missing rate (call rate)</li>
+<li>Calculating allele Frequency</li>
+<li>Conducting Hardy-Weinberg equilibrium exact test</li>
+<li>Applying filters</li>
+<li>Conducting LD-Pruning</li>
+<li>Calculating inbreeding F coefficient</li>
+<li>Conducting sample &amp; SNP filtering (extract/exclude/keep/remove)</li>
+<li>Estimating IBD / PI_HAT</li>
+<li>Calculating LD</li>
+<li>Data management (make-bed/recode)</li>
+</ol>
+<p>All sample codes and results for this module are available in <code>./04_data_QC</code></p>
+<h3 id="qc-step-summary">QC Step Summary</h3>
+<div class="admonition info">
+<p class="admonition-title">QC Step Summary</p>
+<table>
+<thead>
+<tr>
+<th>QC step</th>
+<th>Option in PLINK</th>
+<th>Commonly used threshold to exclude</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SNP missing rate</td>
+<td><code>--geno</code>,  <code>--missing</code></td>
+<td>missing rate &gt; 0.01 (0.02, or 0.05)</td>
+</tr>
+<tr>
+<td>Sample missing rate</td>
+<td><code>--mind</code>, <code>--missing</code></td>
+<td>missing rate &gt; 0.01 (0.02, or 0.05)</td>
+</tr>
+<tr>
+<td>Minor allele frequency</td>
+<td><code>--freq</code>, <code>--maf</code></td>
+<td>maf &lt; 0.01</td>
+</tr>
+<tr>
+<td>Sample Relatedness</td>
+<td><code>--genome</code></td>
+<td>pi_hat &gt; 0.2 to exclude second-degree relatives</td>
+</tr>
+<tr>
+<td>Hardy-Weinberg equilibrium</td>
+<td><code>--hwe</code>,<code>--hardy</code></td>
+<td>hwe &lt; 1e-6</td>
+</tr>
+<tr>
+<td>Inbreeding F coefficient</td>
+<td><code>--het</code></td>
+<td>outside of 3 SD from the mean</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>First, we can calculate some basic statistics of our simulated data:</p>
+<h3 id="missing-rate-call-rate">Missing rate (call rate)</h3>
+<p>The first thing we want to know is the missing rate of our data. Usually, we need to check the missing rate of samples and SNPs to decide a threshold to exclude low-quality samples and SNPs. (https://www.cog-genomics.org/plink/1.9/basic_stats#missing)</p>
+<ul>
+<li><strong>Sample missing rate</strong>: the proportion of missing values for an individual across all SNPs.</li>
+<li><strong>SNP missing rate</strong>: the proportion of missing values for a SNP across all samples.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Missing rate and Call rate</p>
+<p>Suppose we have N samples and M SNPs for each sample.</p>
+<p>For sample <span class="arithmatex">\(j\)</span> :</p>
+<div class="arithmatex">\[Sample\ Missing\ Rate_{j} = {{N_{missing\ SNPs\ for\ j}}\over{M}} = 1 - Call\ Rate_{sample, j}\]</div>
+<p>For SNP <span class="arithmatex">\(i\)</span> :</p>
+<div class="arithmatex">\[SNP\ Missing\ Rate_{i} = {{N_{missing\ samples\ at\ i}}\over{N}} = 1 - Call\ Rate_{SNP, i}\]</div>
+</div>
+<p>The input is PLINK bed/bim/fam file. Usually, they have the same prefix, and we just need to pass the prefix to <code>--bfile</code> option.</p>
+<h3 id="plink-syntax">PLINK syntax</h3>
+<div class="admonition info">
+<p class="admonition-title">PLINK syntax</p>
+<p><img alt="image" src="https://user-images.githubusercontent.com/40289485/161413684-a128b87f-fb79-4b13-a7b5-acfa997c4421.png" /></p>
+</div>
+<p>To calculate the missing rate, we need the flag <code>--missing</code>, which tells PLINK to calculate the missing rate in the dataset specified by <code>--bfile</code>. </p>
+<div class="admonition example">
+<p class="admonition-title">Calculate missing rate</p>
+<p><div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>../04_Data_QC
+<span class="nv">genotypeFile</span><span class="o">=</span><span class="s2">&quot;../01_Dataset/1KG.EAS.auto.snp.norm.nodup.split.rare002.common015.missing&quot;</span><span class="w"> </span><span class="c1">#!!! Please add your own path here.  &quot;1KG.EAS.auto.snp.norm.nodup.split.rare002.common015.missing&quot; is the prefix of PLINK bed file. </span>
+
+plink<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--missing<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+Remeber to set the value for <code>${genotypeFile}</code>.</p>
+</div>
+<p>This code will generate two files <code>plink_results.imiss</code> and <code>plink_results.lmiss</code>, which contain the missing rate information for samples and SNPs respectively.</p>
+<p>Take a look at the <code>.imiss</code> file. The last column shows the missing rate for samples. Since we used part of the 1000 Genome Project data this time, there are no missing SNPs in the original datasets. But for educational purposes, we randomly make some of the genotypes missing.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># missing rate for each sample</span>
+head<span class="w"> </span>plink_results.imiss
+<span class="w">    </span>FID<span class="w">       </span>IID<span class="w"> </span>MISS_PHENO<span class="w">   </span>N_MISS<span class="w">   </span>N_GENO<span class="w">   </span>F_MISS
+HG00403<span class="w">   </span>HG00403<span class="w">          </span>Y<span class="w">    </span><span class="m">10020</span><span class="w">  </span><span class="m">1235116</span><span class="w"> </span><span class="m">0</span>.008113
+HG00404<span class="w">   </span>HG00404<span class="w">          </span>Y<span class="w">     </span><span class="m">9192</span><span class="w">  </span><span class="m">1235116</span><span class="w"> </span><span class="m">0</span>.007442
+HG00406<span class="w">   </span>HG00406<span class="w">          </span>Y<span class="w">    </span><span class="m">15751</span><span class="w">  </span><span class="m">1235116</span><span class="w">  </span><span class="m">0</span>.01275
+HG00407<span class="w">   </span>HG00407<span class="w">          </span>Y<span class="w">    </span><span class="m">14653</span><span class="w">  </span><span class="m">1235116</span><span class="w">  </span><span class="m">0</span>.01186
+HG00409<span class="w">   </span>HG00409<span class="w">          </span>Y<span class="w">     </span><span class="m">5667</span><span class="w">  </span><span class="m">1235116</span><span class="w"> </span><span class="m">0</span>.004588
+HG00410<span class="w">   </span>HG00410<span class="w">          </span>Y<span class="w">     </span><span class="m">6066</span><span class="w">  </span><span class="m">1235116</span><span class="w"> </span><span class="m">0</span>.004911
+HG00419<span class="w">   </span>HG00419<span class="w">          </span>Y<span class="w">    </span><span class="m">20000</span><span class="w">  </span><span class="m">1235116</span><span class="w">  </span><span class="m">0</span>.01619
+HG00421<span class="w">   </span>HG00421<span class="w">          </span>Y<span class="w">    </span><span class="m">17542</span><span class="w">  </span><span class="m">1235116</span><span class="w">   </span><span class="m">0</span>.0142
+HG00422<span class="w">   </span>HG00422<span class="w">          </span>Y<span class="w">    </span><span class="m">18608</span><span class="w">  </span><span class="m">1235116</span><span class="w">  </span><span class="m">0</span>.01507
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># missing rate for each SNP</span>
+head<span class="w"> </span>plink_results.lmiss
+<span class="w"> </span>CHR<span class="w">              </span>SNP<span class="w">   </span>N_MISS<span class="w">   </span>N_GENO<span class="w">   </span>F_MISS
+<span class="w">   </span><span class="m">1</span><span class="w">      </span><span class="m">1</span>:14930:A:G<span class="w">        </span><span class="m">2</span><span class="w">      </span><span class="m">504</span><span class="w"> </span><span class="m">0</span>.003968
+<span class="w">   </span><span class="m">1</span><span class="w">      </span><span class="m">1</span>:15774:G:A<span class="w">        </span><span class="m">3</span><span class="w">      </span><span class="m">504</span><span class="w"> </span><span class="m">0</span>.005952
+<span class="w">   </span><span class="m">1</span><span class="w">      </span><span class="m">1</span>:15777:A:G<span class="w">        </span><span class="m">3</span><span class="w">      </span><span class="m">504</span><span class="w"> </span><span class="m">0</span>.005952
+<span class="w">   </span><span class="m">1</span><span class="w">      </span><span class="m">1</span>:57292:C:T<span class="w">        </span><span class="m">6</span><span class="w">      </span><span class="m">504</span><span class="w">   </span><span class="m">0</span>.0119
+<span class="w">   </span><span class="m">1</span><span class="w">      </span><span class="m">1</span>:77874:G:A<span class="w">        </span><span class="m">3</span><span class="w">      </span><span class="m">504</span><span class="w"> </span><span class="m">0</span>.005952
+<span class="w">   </span><span class="m">1</span><span class="w">      </span><span class="m">1</span>:87360:C:T<span class="w">        </span><span class="m">1</span><span class="w">      </span><span class="m">504</span><span class="w"> </span><span class="m">0</span>.001984
+<span class="w">   </span><span class="m">1</span><span class="w">      </span><span class="m">1</span>:92917:T:A<span class="w">        </span><span class="m">7</span><span class="w">      </span><span class="m">504</span><span class="w">  </span><span class="m">0</span>.01389
+<span class="w">   </span><span class="m">1</span><span class="w">     </span><span class="m">1</span>:104186:T:C<span class="w">        </span><span class="m">3</span><span class="w">      </span><span class="m">504</span><span class="w"> </span><span class="m">0</span>.005952
+<span class="w">   </span><span class="m">1</span><span class="w">     </span><span class="m">1</span>:125271:C:T<span class="w">        </span><span class="m">2</span><span class="w">      </span><span class="m">504</span><span class="w"> </span><span class="m">0</span>.003968
+</code></pre></div>
+<div class="admonition example">
+<p class="admonition-title">Distribution of sample missing rate and SNP missing rate</p>
+<p>Note: The missing values were simulated based on normal distributions for each individual.  </p>
+<p>Sample missing rate</p>
+<p><img alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/ec776c99-d73f-4cc7-b1e4-d4566acc83df" /></p>
+<p>SNP missing rate</p>
+<p><img alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/30a11f16-d43e-4e1f-a281-90cf02947916" /></p>
+</div>
+<p>For the meaning of headers, please refer to <a href="https://www.cog-genomics.org/plink/1.9/formats">PLINK documents</a>.</p>
+<h3 id="allele-frequency">Allele Frequency</h3>
+<p>One of the most important statistics of SNPs is their frequency in a certain population. Many downstream analyses are based on investigating differences in allele frequencies.</p>
+<p>Usually, variants can be categorized into 3 groups based on their Minor Allele Frequency (MAF):</p>
+<ol>
+<li><strong>Common variants</strong> : MAF&gt;=0.05</li>
+<li><strong>Low-frequency variants</strong> : 0.01&lt;=MAF&lt;0.05</li>
+<li><strong>Rare variants</strong> : MAF&lt;0.01</li>
+</ol>
+<div class="admonition info">
+<p class="admonition-title">How to calculate Minor Allele Frequency (MAF)</p>
+<p>Suppose the reference allele(REF) is A and the alternative allele(ALT) is B for a certain SNP. The posible genotypes are AA, AB and BB.  In a population of N samples (2N alleles), <span class="arithmatex">\(N = N_{AA} + 2 \times N_{AB} + N_{BB}\)</span> :</p>
+<ul>
+<li>the number of A alleles:  <span class="arithmatex">\(N_A = 2 \times N_{AA} + N_{AB}\)</span></li>
+<li>the number of B alleles:  <span class="arithmatex">\(N_B = 2 \times N_{BB} + N_{AB}\)</span></li>
+</ul>
+<p>So we can calculate the allele frequency:</p>
+<ul>
+<li>Reference Allele Frequency : <span class="arithmatex">\(AF_{REF}= {{N_A}\over{N_A + N_B}}\)</span></li>
+<li>Alternative Allele Frequency : <span class="arithmatex">\(AF_{ALT}= {{N_B}\over{N_A + N_B}}\)</span></li>
+</ul>
+<p>The MAF for this SNP in this specific population is defined as:</p>
+<p><span class="arithmatex">\(MAF = min( AF_{REF}, AF_{ALT} )\)</span></p>
+</div>
+<p>For different downstream analyses, we might use different sets of variants. For example, for PCA, we might use only common variants. For gene-based tests, we might use only rare variants.</p>
+<p>Using PLINK1.9 we can easily calculate the MAF of variants in the input data.</p>
+<div class="admonition example">
+<p class="admonition-title">Calculate the MAF of variants using PLINK1.9</p>
+<div class="highlight"><pre><span></span><code>plink<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--freq<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># results from plink1.9</span>
+head<span class="w"> </span>plink_results.frq
+CHR<span class="w">              </span>SNP<span class="w">   </span>A1<span class="w">   </span>A2<span class="w">          </span>MAF<span class="w">  </span>NCHROBS
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:14930:A:G<span class="w">    </span>G<span class="w">    </span>A<span class="w">       </span><span class="m">0</span>.4133<span class="w">     </span><span class="m">1004</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:15774:G:A<span class="w">    </span>A<span class="w">    </span>G<span class="w">      </span><span class="m">0</span>.02794<span class="w">     </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:15777:A:G<span class="w">    </span>G<span class="w">    </span>A<span class="w">      </span><span class="m">0</span>.07385<span class="w">     </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:57292:C:T<span class="w">    </span>T<span class="w">    </span>C<span class="w">       </span><span class="m">0</span>.1054<span class="w">      </span><span class="m">996</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:77874:G:A<span class="w">    </span>A<span class="w">    </span>G<span class="w">      </span><span class="m">0</span>.01996<span class="w">     </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:87360:C:T<span class="w">    </span>T<span class="w">    </span>C<span class="w">      </span><span class="m">0</span>.02286<span class="w">     </span><span class="m">1006</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:92917:T:A<span class="w">    </span>A<span class="w">    </span>T<span class="w">     </span><span class="m">0</span>.003018<span class="w">      </span><span class="m">994</span>
+<span class="m">1</span><span class="w">     </span><span class="m">1</span>:104186:T:C<span class="w">    </span>T<span class="w">    </span>C<span class="w">        </span><span class="m">0</span>.499<span class="w">     </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">     </span><span class="m">1</span>:125271:C:T<span class="w">    </span>C<span class="w">    </span>T<span class="w">      </span><span class="m">0</span>.03088<span class="w">     </span><span class="m">1004</span>
+</code></pre></div>
+</div>
+<p>Next, we use plink2 to run the same options to check the difference between the results.</p>
+<div class="admonition example">
+<p class="admonition-title">Calculate the alternative allele frequencies of variants using PLINK2</p>
+<div class="highlight"><pre><span></span><code>plink2<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--freq<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># results from plink2</span>
+head<span class="w"> </span>plink_results.afreq
+<span class="c1">#CHROM  ID      REF     ALT     PROVISIONAL_REF?        ALT_FREQS       OBS_CT</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:14930:A:G<span class="w">     </span>A<span class="w">       </span>G<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.413347<span class="w">        </span><span class="m">1004</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:15774:G:A<span class="w">     </span>G<span class="w">       </span>A<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.0279441<span class="w">       </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:15777:A:G<span class="w">     </span>A<span class="w">       </span>G<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.0738523<span class="w">       </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:57292:C:T<span class="w">     </span>C<span class="w">       </span>T<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.105422<span class="w">        </span><span class="m">996</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:77874:G:A<span class="w">     </span>G<span class="w">       </span>A<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.0199601<span class="w">       </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:87360:C:T<span class="w">     </span>C<span class="w">       </span>T<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.0228628<span class="w">       </span><span class="m">1006</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:92917:T:A<span class="w">     </span>T<span class="w">       </span>A<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.00301811<span class="w">      </span><span class="m">994</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:104186:T:C<span class="w">    </span>T<span class="w">       </span>C<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.500998<span class="w">        </span><span class="m">1002</span>
+<span class="m">1</span><span class="w">       </span><span class="m">1</span>:125271:C:T<span class="w">    </span>C<span class="w">       </span>T<span class="w">       </span>Y<span class="w">       </span><span class="m">0</span>.969124<span class="w">        </span><span class="m">1004</span>
+</code></pre></div>
+</div>
+<p>We need to pay attention to the concepts here.</p>
+<p>In PLINK1.9, the concept here is minor (A1) and major(A2) allele, while in PLINK2 it is the reference (REF) allele and the alternative (ALT) allele.</p>
+<ul>
+<li><strong>Major / Minor</strong>: Major allele and minor allele are defined as the allele with the highest and lower(or the second highest for multiallelic variants) allele in a given population, respectively. So major and minor alleles for a certain SNP might be different in two independent populations. The range for MAF(minor allele frequencies) is [0,0.5].</li>
+<li><strong>Ref / Alt</strong>: The reference (REF) and alternative (ALT) alleles are simply determined by the allele on a reference genome. If we use the same reference genome, the reference(REF) and alternative(ALT) alleles will be the same across populations. The reference allele could be major or minor in different populations. The range for alternative allele frequency is [0,1], since it could be the major allele or the minor allele in a given population.</li>
+</ul>
+<h3 id="hardy-weinberg-equilibrium-exact-test">Hardy-Weinberg equilibrium exact test</h3>
+<p>For SNP QC, besides checking the missing rate, we also need to check if the SNP is in Hardy-Weinberg equilibrium:</p>
+<p><code>--hardy</code> will perform Hardy-Weinberg equilibrium exact test for each variant. Variants with low P value usually suggest genotyping errors, or indicate evolutionary selection for these variants.</p>
+<p>The following command can calculate the Hardy-Weinberg equilibrium exact test statistics for all SNPs. (https://www.cog-genomics.org/plink/1.9/basic_stats#hardy)</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Suppose we have N unrelated samples (2N alleles).
+Under HWE, the <strong>exact probability</strong> of observing <span class="arithmatex">\(n_{AB}\)</span> sample with genotype AB in N samples is:</p>
+<div class="arithmatex">\[P(N_{AB} = n_{AB} | N, n_A) = {{2^{n_{AB}}}N!\over{n_{AA}!n_{AB}!n_{BB}!}} \times {{n_A!n_B!}\over{(2N)!}} \]</div>
+<p>To compute the Hardy-Weinberg equilibrium exact test statistics, we will sum up the probabilities of all configurations with probability equal to or less than the observed configuration :</p>
+<div class="arithmatex">\[P_{HWE} = \sum_{n^{*}_AB} I[P(N_{AB} = n_{AB} | N, n_A) \geqq P(N_{AB} = n^{*}_{AB} | N, n_A)] \times P(N_{AB} = n^{*}_{AB} | N, n_A)\]</div>
+<p><span class="arithmatex">\(I(x)\)</span> is the indicator function. If x is true, <span class="arithmatex">\(I(x) = 1\)</span>; otherwise, <span class="arithmatex">\(I(x) = 0\)</span>.</p>
+<p>Reference : Wigginton, J. E., Cutler, D. J., &amp; Abecasis, G. R. (2005). A note on exact tests of Hardy-Weinberg equilibrium. The American Journal of Human Genetics, 76(5), 887-893. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1199378/">Link</a></p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Calculate the Hardy-Weinberg equilibrium exact test statistics for a single SNP using Python</p>
+<p>This code is converted from <a href="https://github.com/jeremymcrae/snphwe/blob/master/src/snp_hwe.cpp">here</a> (Jeremy McRae) to python. Orginal citation: Wigginton, JE, Cutler, DJ, and Abecasis, GR (2005) A Note on Exact Tests of Hardy-Weinberg Equilibrium. AJHG 76: 887-893
+<div class="highlight"><pre><span></span><code>def snphwe(obs_hets: int, obs_hom1: int, obs_hom2: int) -&gt; float:
+&quot;&quot;&quot;Calculate Hardy-Weinberg equilibrium exact test for a variant
+
+Args:
+    obs_hets (int): observed heterozygous number
+    obs_hom1 (int): first observed homozygous number
+    obs_hom2 (int): second observed homozygous number
+
+Returns:
+    float: Hardy-Weinberg equilibrium exact test p-value.
+
+    - P &gt; 0.05: No significant deviation from Hardy-Weinberg equilibrium (HWE).
+    - P ≤ 0.05: Significant deviation from HWE, which could be due to factors such as population stratification, inbreeding, genotyping errors, or natural selection.
+&quot;&quot;&quot;
+obs_minor_homs = min(obs_hom1, obs_hom2)
+obs_mijor_homs = max(obs_hom1, obs_hom2)
+
+rare = 2 * obs_minor_homs + obs_hets
+genotypes = obs_hets + obs_mijor_homs + obs_minor_homs
+
+probs = [0.0 for i in range(rare +1)]
+
+mid = rare * (2 * genotypes - rare) // (2 * genotypes)
+if mid % 2 != rare%2:
+    mid += 1
+
+probs[mid] = 1.0
+sum_p = 1 #probs[mid]
+
+curr_homr = (rare - mid) // 2
+curr_homc = genotypes - mid - curr_homr
+
+for curr_hets in range(mid, 1, -2):
+    probs[curr_hets - 2] = probs[curr_hets] * curr_hets * (curr_hets - 1.0)/ (4.0 * (curr_homr + 1.0) * (curr_homc + 1.0))
+    sum_p+= probs[curr_hets - 2]
+    curr_homr += 1
+    curr_homc += 1
+
+curr_homr = (rare - mid) // 2
+curr_homc = genotypes - mid - curr_homr
+
+for curr_hets in range(mid, rare-1, 2):
+    probs[curr_hets + 2] = probs[curr_hets] * 4.0 * curr_homr * curr_homc/ ((curr_hets + 2.0) * (curr_hets + 1.0))
+    sum_p += probs[curr_hets + 2]
+    curr_homr -= 1
+    curr_homc -= 1
+
+target = probs[obs_hets]
+p_hwe = 0.0
+for p in probs:
+    if p &lt;= target :
+        p_hwe += p / sum_p  
+
+return min(p_hwe,1)
+
+if __name__ == &#39;__main__&#39;:
+# For an example, we had 502 samples. 
+# At position 1:14930:A:G, we count:
+#     + 407 heterozygous genotypes (signed 0|1 or 1|0).
+#     + 4 homozygous genotypes AA (signed 0|0)
+#     + 91 homozygous genotypes GG (signed 1|1)
+print(snphwe(407,4,91))
+</code></pre></div></p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Calculate the Hardy-Weinberg equilibrium exact test statistics using PLINK</p>
+<p><div class="highlight"><pre><span></span><code>plink<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--hardy<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>plink_results.hwe
+<span class="w">    </span>CHR<span class="w">              </span>SNP<span class="w">     </span>TEST<span class="w">   </span>A1<span class="w">   </span>A2<span class="w">                 </span>GENO<span class="w">   </span>O<span class="o">(</span>HET<span class="o">)</span><span class="w">   </span>E<span class="o">(</span>HET<span class="o">)</span><span class="w">            </span>P
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:14930:A:G<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>G<span class="w">    </span>A<span class="w">             </span><span class="m">4</span>/407/91<span class="w">   </span><span class="m">0</span>.8108<span class="w">    </span><span class="m">0</span>.485<span class="w">    </span><span class="m">4</span>.864e-61
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:15774:G:A<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>A<span class="w">    </span>G<span class="w">             </span><span class="m">0</span>/28/473<span class="w">  </span><span class="m">0</span>.05589<span class="w">  </span><span class="m">0</span>.05433<span class="w">            </span><span class="m">1</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:15777:A:G<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>G<span class="w">    </span>A<span class="w">             </span><span class="m">1</span>/72/428<span class="w">   </span><span class="m">0</span>.1437<span class="w">   </span><span class="m">0</span>.1368<span class="w">       </span><span class="m">0</span>.5053
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:57292:C:T<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>T<span class="w">    </span>C<span class="w">             </span><span class="m">3</span>/99/396<span class="w">   </span><span class="m">0</span>.1988<span class="w">   </span><span class="m">0</span>.1886<span class="w">       </span><span class="m">0</span>.3393
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:77874:G:A<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>A<span class="w">    </span>G<span class="w">             </span><span class="m">0</span>/20/481<span class="w">  </span><span class="m">0</span>.03992<span class="w">  </span><span class="m">0</span>.03912<span class="w">            </span><span class="m">1</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:87360:C:T<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>T<span class="w">    </span>C<span class="w">             </span><span class="m">0</span>/23/480<span class="w">  </span><span class="m">0</span>.04573<span class="w">  </span><span class="m">0</span>.04468<span class="w">            </span><span class="m">1</span>
+<span class="m">1</span><span class="w">      </span><span class="m">1</span>:92917:T:A<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>A<span class="w">    </span>T<span class="w">              </span><span class="m">0</span>/3/494<span class="w"> </span><span class="m">0</span>.006036<span class="w"> </span><span class="m">0</span>.006018<span class="w">            </span><span class="m">1</span>
+<span class="m">1</span><span class="w">     </span><span class="m">1</span>:104186:T:C<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>T<span class="w">    </span>C<span class="w">            </span><span class="m">74</span>/352/75<span class="w">   </span><span class="m">0</span>.7026<span class="w">      </span><span class="m">0</span>.5<span class="w">    </span><span class="m">6</span>.418e-20
+<span class="m">1</span><span class="w">     </span><span class="m">1</span>:125271:C:T<span class="w">  </span>ALL<span class="o">(</span>NP<span class="o">)</span><span class="w">    </span>C<span class="w">    </span>T<span class="w">             </span><span class="m">1</span>/29/472<span class="w">  </span><span class="m">0</span>.05777<span class="w">  </span><span class="m">0</span>.05985<span class="w">       </span><span class="m">0</span>.3798
+</code></pre></div></p>
+</div>
+<h3 id="applying-filters">Applying filters</h3>
+<p>Previously we calculated the basic statistics using PLINK. But when performing certain analyses, we just want to exclude the bad-quality samples or SNPs instead of calculating the statistics for all samples and SNPs.</p>
+<p>In this case we can apply the following filters for example:</p>
+<ul>
+<li><code>--maf 0.01</code> : exlcude snps with maf&lt;0.01</li>
+<li><code>--geno 0.02</code> :filters out all variants with missing rates exceeding 0.02</li>
+<li><code>--mind 0.02</code> :filters out all samples with missing rates exceeding 0.02</li>
+<li><code>--hwe 1e-6</code> : filters out all variants which have Hardy-Weinberg equilibrium exact test p-value below the provided threshold. NOTE: With case/control data, cases and missing phenotypes are normally ignored. (see https://www.cog-genomics.org/plink/1.9/filter#hwe)</li>
+</ul>
+<p>We will apply these filters in the following example if LD-pruning.</p>
+<h3 id="ld-pruning">LD Pruning</h3>
+<p>There is often strong Linkage disequilibrium(LD) among SNPs, for some analysis we don't need all SNPs and we need to remove the redundant SNPs to avoid bias in genetic estimations. For example, for relatedness estimation, we will use only LD-Pruned SNP set. </p>
+<p>We can use <code>--indep-pairwise 50 5 0.2</code> to filter out those in strong LD and keep only the independent SNPs.</p>
+<div class="admonition info">
+<p class="admonition-title">Meaning of <code>--indep-pairwise x y z</code></p>
+<ul>
+<li>consider a window of <code>x</code> SNPs</li>
+<li>calculate LD between each pair of SNPs in the window and remove one of a pair of SNPs if the LD is greater than <code>z</code></li>
+<li>shift the window <code>y</code> SNPs forward and repeat the procedure.</li>
+</ul>
+<p>Please check https://www.cog-genomics.org/plink/1.9/ld#indep for details.</p>
+</div>
+<p>Combined with the filters we just introduced, we can run:</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><div class="highlight"><pre><span></span><code>plink<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--maf<span class="w"> </span><span class="m">0</span>.01<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--geno<span class="w"> </span><span class="m">0</span>.02<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mind<span class="w"> </span><span class="m">0</span>.02<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--hwe<span class="w"> </span>1e-6<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--indep-pairwise<span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="m">0</span>.2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+This command generates two outputs:  <code>plink_results.prune.in</code> and <code>plink_results.prune.out</code>
+<code>plink_results.prune.in</code> is the independent set of SNPs we will use in the following analysis.</p>
+<p>You can check the PLINK log for how many variants were removed based on the filters you applied:
+<div class="highlight"><pre><span></span><code>Total genotyping rate in remaining samples is 0.993916.
+108837 variants removed due to missing genotype data (--geno).
+--hwe: 9754 variants removed due to Hardy-Weinberg exact test.
+87149 variants removed due to minor allele threshold(s)
+(--maf/--max-maf/--mac/--max-mac).
+1029376 variants and 501 people pass filters and QC.
+</code></pre></div></p>
+<p>Let's take a look at the LD-pruned SNP file. Basically, it just contains one SNP id per line.</p>
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>plink_results.prune.in
+<span class="m">1</span>:15774:G:A
+<span class="m">1</span>:15777:A:G
+<span class="m">1</span>:77874:G:A
+<span class="m">1</span>:87360:C:T
+<span class="m">1</span>:125271:C:T
+<span class="m">1</span>:232449:G:A
+<span class="m">1</span>:533113:A:G
+<span class="m">1</span>:565697:A:G
+<span class="m">1</span>:566933:A:G
+<span class="m">1</span>:567092:T:C
+</code></pre></div>
+</div>
+<h3 id="inbreeding-f-coefficient">Inbreeding F coefficient</h3>
+<p>Next, we can check the heterozygosity F of samples (https://www.cog-genomics.org/plink/1.9/basic_stats#ibc) : </p>
+<p><code>-het</code> option will compute observed and expected autosomal homozygous genotype counts for each sample. Usually, we need to exclude individuals with high or low heterozygosity coefficients, which suggests that the sample might be contaminated. </p>
+<div class="admonition info">
+<p class="admonition-title">Inbreeding F coefficient calculation by PLINK</p>
+<div class="arithmatex">\[F = {{O(HOM) - E(HOM)}\over{ M - E(HOM)}}\]</div>
+<ul>
+<li><span class="arithmatex">\(E(HOM)\)</span> :Expected Homozygous Genotype Count </li>
+<li><span class="arithmatex">\(O(HOM)\)</span> :Observed Homozygous Genotype Count </li>
+<li>M : Number of SNPs</li>
+</ul>
+<p>High F may indicate a relatively high level of inbreeding. </p>
+<p>Low F may suggest the sample DNA was contaminated.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Performing LD-pruning beforehand since these calculations do not take LD into account.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Calculate inbreeding F coefficient</p>
+<div class="highlight"><pre><span></span><code>plink<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--extract<span class="w"> </span>plink_results.prune.in<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--het<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+<p>Check the output:</p>
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>plink_results.het
+<span class="w">    </span>FID<span class="w">       </span>IID<span class="w">       </span>O<span class="o">(</span>HOM<span class="o">)</span><span class="w">       </span>E<span class="o">(</span>HOM<span class="o">)</span><span class="w">        </span>N<span class="o">(</span>NM<span class="o">)</span><span class="w">            </span>F
+HG00403<span class="w">   </span>HG00403<span class="w">       </span><span class="m">180222</span><span class="w">    </span><span class="m">1</span>.796e+05<span class="w">       </span><span class="m">217363</span><span class="w">      </span><span class="m">0</span>.01698
+HG00404<span class="w">   </span>HG00404<span class="w">       </span><span class="m">180127</span><span class="w">    </span><span class="m">1</span>.797e+05<span class="w">       </span><span class="m">217553</span><span class="w">      </span><span class="m">0</span>.01023
+HG00406<span class="w">   </span>HG00406<span class="w">       </span><span class="m">178891</span><span class="w">    </span><span class="m">1</span>.789e+05<span class="w">       </span><span class="m">216533</span><span class="w">   </span>-0.0001138
+HG00407<span class="w">   </span>HG00407<span class="w">       </span><span class="m">178992</span><span class="w">     </span><span class="m">1</span>.79e+05<span class="w">       </span><span class="m">216677</span><span class="w">   </span>-0.0008034
+HG00409<span class="w">   </span>HG00409<span class="w">       </span><span class="m">179918</span><span class="w">    </span><span class="m">1</span>.801e+05<span class="w">       </span><span class="m">218045</span><span class="w">    </span>-0.006049
+HG00410<span class="w">   </span>HG00410<span class="w">       </span><span class="m">179782</span><span class="w">    </span><span class="m">1</span>.801e+05<span class="w">       </span><span class="m">218028</span><span class="w">    </span>-0.009268
+HG00419<span class="w">   </span>HG00419<span class="w">       </span><span class="m">178362</span><span class="w">    </span><span class="m">1</span>.783e+05<span class="w">       </span><span class="m">215849</span><span class="w">     </span><span class="m">0</span>.001315
+HG00421<span class="w">   </span>HG00421<span class="w">       </span><span class="m">178222</span><span class="w">    </span><span class="m">1</span>.785e+05<span class="w">       </span><span class="m">216110</span><span class="w">    </span>-0.008288
+HG00422<span class="w">   </span>HG00422<span class="w">       </span><span class="m">178316</span><span class="w">    </span><span class="m">1</span>.784e+05<span class="w">       </span><span class="m">215938</span><span class="w">      </span>-0.0022
+</code></pre></div>
+</div>
+<p>A commonly used method is to exclude samples with heterozygosity F deviating more than 3 standard deviations (SD) from the mean. Some studies used a fixed value such as +-0.15 or +-0.2.</p>
+<div class="admonition warning">
+<p class="admonition-title">Usually we will use only <a href="#ld-pruning">LD-pruned SNPs</a>  for the calculation of F.</p>
+</div>
+<p>We can plot the distribution of F:</p>
+<div class="admonition example">
+<p class="admonition-title">Distribution of <span class="arithmatex">\(F_{het}\)</span> in sample data</p>
+<p><img alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/6dec3e49-fe35-45ee-9337-d788ef3d51cd" /></p>
+</div>
+<p>Here we use +-0.1 as the <span class="arithmatex">\(F_{het}\)</span> threshold for convenience. </p>
+<div class="admonition example">
+<p class="admonition-title">Create sample list of individuals with extreme F using awk</p>
+<div class="highlight"><pre><span></span><code># only one sample
+awk &#39;NR&gt;1 &amp;&amp; $6&gt;0.1 || $6&lt;-0.1 {print $1,$2}&#39; plink_results.het &gt; high_het.sample
+</code></pre></div>
+</div>
+<h3 id="sample-snp-filtering-extractexcludekeepremove">Sample &amp; SNP filtering (extract/exclude/keep/remove)</h3>
+<p>Sometimes we will use only a subset of samples or SNPs included the original dataset. 
+In this case, we can use <code>--extract</code> or <code>--exclude</code> to select or exclude SNPs from analysis, <code>--keep</code> or <code>--remove</code> to select or exclude samples.</p>
+<p>For  <code>--keep</code> or <code>--remove</code>, the input is the filename of a sample FID and IID file.
+For <code>--extract</code> or <code>--exclude</code>, the input is the filename of an SNP list file.</p>
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>plink_results.prune.in
+<span class="m">1</span>:15774:G:A
+<span class="m">1</span>:15777:A:G
+<span class="m">1</span>:77874:G:A
+<span class="m">1</span>:87360:C:T
+<span class="m">1</span>:125271:C:T
+<span class="m">1</span>:232449:G:A
+<span class="m">1</span>:533113:A:G
+<span class="m">1</span>:565697:A:G
+<span class="m">1</span>:566933:A:G
+<span class="m">1</span>:567092:T:C
+</code></pre></div>
+<h3 id="ibd-pi_hat-kinship-coefficient">IBD / PI_HAT / kinship coefficient</h3>
+<p><code>--genome</code> will estimate IBS/IBD. Usually, for this analysis, we need to prune our data first since the strong LD will cause bias in the results.
+(This step is computationally intensive)</p>
+<p>Combined with the <code>--extract</code>, we can run:</p>
+<div class="admonition info">
+<p class="admonition-title">How PLINK estimates IBD</p>
+<p>The prior probability of IBS sharing can be modeled as: </p>
+<div class="arithmatex">\[P(I=i) = \sum^{z=i}_{z=0}P(I=i|Z=z)P(Z=z)\]</div>
+<ul>
+<li>I: IBS state (I = 0, 1, or 2)</li>
+<li>Z: IBD state (Z = 0, 1, or 2)</li>
+<li><span class="arithmatex">\(P(I|Z)\)</span> is a function of allele frequency. PLINK will average over all SNPs to obtain the expected value for <span class="arithmatex">\(P(I|Z)\)</span>.</li>
+</ul>
+<p>So the proportion of alleles shared IBD (<span class="arithmatex">\(\hat{\pi}\)</span>) can be estimated by:</p>
+<div class="arithmatex">\[\hat{\pi} = {{P(Z=1)}\over{2}} + P(Z=2)\]</div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Estimate IBD</p>
+<div class="highlight"><pre><span></span><code>plink<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--extract<span class="w"> </span>plink_results.prune.in<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--genome<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+<p>PI_HAT is the IBD estimation. Please check https://www.cog-genomics.org/plink/1.9/ibd for more details.
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>plink_results.genome
+<span class="w">    </span>FID1<span class="w">     </span>IID1<span class="w">     </span>FID2<span class="w">     </span>IID2<span class="w"> </span>RT<span class="w">    </span>EZ<span class="w">      </span>Z0<span class="w">      </span>Z1<span class="w">      </span>Z2<span class="w">  </span>PI_HAT<span class="w"> </span>PHE<span class="w">       </span>DST<span class="w">     </span>PPC<span class="w">   </span>RATIO
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00404<span class="w">  </span>HG00404<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">1</span>.0000<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.858562<span class="w">  </span><span class="m">0</span>.3679<span class="w">  </span><span class="m">1</span>.9774
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00406<span class="w">  </span>HG00406<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">0</span>.9805<span class="w">  </span><span class="m">0</span>.0044<span class="w">  </span><span class="m">0</span>.0151<span class="w">  </span><span class="m">0</span>.0173<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.858324<span class="w">  </span><span class="m">0</span>.8183<span class="w">  </span><span class="m">2</span>.0625
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00407<span class="w">  </span>HG00407<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">0</span>.9790<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span><span class="m">0</span>.0210<span class="w">  </span><span class="m">0</span>.0210<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.857794<span class="w">  </span><span class="m">0</span>.8034<span class="w">  </span><span class="m">2</span>.0587
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00409<span class="w">  </span>HG00409<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">0</span>.9912<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span><span class="m">0</span>.0088<span class="w">  </span><span class="m">0</span>.0088<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.857024<span class="w">  </span><span class="m">0</span>.2637<span class="w">  </span><span class="m">1</span>.9578
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00410<span class="w">  </span>HG00410<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">0</span>.9699<span class="w">  </span><span class="m">0</span>.0235<span class="w">  </span><span class="m">0</span>.0066<span class="w">  </span><span class="m">0</span>.0184<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.858194<span class="w">  </span><span class="m">0</span>.6889<span class="w">  </span><span class="m">2</span>.0335
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00419<span class="w">  </span>HG00419<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">1</span>.0000<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.857643<span class="w">  </span><span class="m">0</span>.8597<span class="w">  </span><span class="m">2</span>.0745
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00421<span class="w">  </span>HG00421<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">0</span>.9773<span class="w">  </span><span class="m">0</span>.0218<span class="w">  </span><span class="m">0</span>.0010<span class="w">  </span><span class="m">0</span>.0118<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.857276<span class="w">  </span><span class="m">0</span>.2186<span class="w">  </span><span class="m">1</span>.9484
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00422<span class="w">  </span>HG00422<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">0</span>.9880<span class="w">  </span><span class="m">0</span>.0000<span class="w">  </span><span class="m">0</span>.0120<span class="w">  </span><span class="m">0</span>.0120<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.857224<span class="w">  </span><span class="m">0</span>.8277<span class="w">  </span><span class="m">2</span>.0652
+HG00403<span class="w">  </span>HG00403<span class="w">  </span>HG00428<span class="w">  </span>HG00428<span class="w"> </span>UN<span class="w">    </span>NA<span class="w">  </span><span class="m">0</span>.9801<span class="w">  </span><span class="m">0</span>.0069<span class="w">  </span><span class="m">0</span>.0130<span class="w">  </span><span class="m">0</span>.0164<span class="w">  </span>-1<span class="w">  </span><span class="m">0</span>.858162<span class="w">  </span><span class="m">0</span>.9812<span class="w">  </span><span class="m">2</span>.1471
+</code></pre></div></p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">KING-robust kinship estimator</p>
+<p>PLINK2 uses KING-robust kinship estimator, which is more robust in the presence of population substructure. See <a href="https://www.cog-genomics.org/plink/2.0/distance#make_king">here</a>.</p>
+<p>Manichaikul, A., Mychaleckyj, J. C., Rich, S. S., Daly, K., Sale, M., &amp; Chen, W. M. (2010). Robust relationship inference in genome-wide association studies. Bioinformatics, 26(22), 2867-2873.</p>
+</div>
+<p>Since the samples are unrelated, we do not need to remove any samples at this step. But remember to check this for your dataset.</p>
+<h3 id="ld-calculation">LD calculation</h3>
+<p>We can also use our data to estimate the LD between a pair of SNPs.</p>
+<div class="admonition info">
+<p class="admonition-title">Details on LD can be found <a href="https://cloufield.github.io/GWASTutorial/19_ld/">here</a></p>
+</div>
+<p><code>--chr</code> option in PLINK allows us to include SNPs on a specific chromosome.
+To calculate LD r2 for SNPs on chr22 , we can run:</p>
+<div class="admonition example calculate ld r2 for snps on chr22">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code>plink<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--chr<span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--r2<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--out<span class="w"> </span>plink_results
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>head<span class="w"> </span>plink_results.ld
+<span class="w"> </span>CHR_A<span class="w">         </span>BP_A<span class="w">             </span>SNP_A<span class="w">  </span>CHR_B<span class="w">         </span>BP_B<span class="w">             </span>SNP_B<span class="w">           </span>R2
+<span class="m">22</span><span class="w">     </span><span class="m">16069141</span><span class="w">   </span><span class="m">22</span>:16069141:C:G<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16071624</span><span class="w">   </span><span class="m">22</span>:16071624:A:G<span class="w">     </span><span class="m">0</span>.771226
+<span class="m">22</span><span class="w">     </span><span class="m">16069784</span><span class="w">   </span><span class="m">22</span>:16069784:A:T<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16149743</span><span class="w">   </span><span class="m">22</span>:16149743:T:A<span class="w">     </span><span class="m">0</span>.217197
+<span class="m">22</span><span class="w">     </span><span class="m">16069784</span><span class="w">   </span><span class="m">22</span>:16069784:A:T<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16150589</span><span class="w">   </span><span class="m">22</span>:16150589:C:A<span class="w">     </span><span class="m">0</span>.224992
+<span class="m">22</span><span class="w">     </span><span class="m">16069784</span><span class="w">   </span><span class="m">22</span>:16069784:A:T<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16159060</span><span class="w">   </span><span class="m">22</span>:16159060:G:A<span class="w">       </span><span class="m">0</span>.2289
+<span class="m">22</span><span class="w">     </span><span class="m">16149743</span><span class="w">   </span><span class="m">22</span>:16149743:T:A<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16150589</span><span class="w">   </span><span class="m">22</span>:16150589:C:A<span class="w">     </span><span class="m">0</span>.965109
+<span class="m">22</span><span class="w">     </span><span class="m">16149743</span><span class="w">   </span><span class="m">22</span>:16149743:T:A<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16152606</span><span class="w">   </span><span class="m">22</span>:16152606:T:C<span class="w">     </span><span class="m">0</span>.692157
+<span class="m">22</span><span class="w">     </span><span class="m">16149743</span><span class="w">   </span><span class="m">22</span>:16149743:T:A<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16159060</span><span class="w">   </span><span class="m">22</span>:16159060:G:A<span class="w">     </span><span class="m">0</span>.721796
+<span class="m">22</span><span class="w">     </span><span class="m">16149743</span><span class="w">   </span><span class="m">22</span>:16149743:T:A<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16193549</span><span class="w">   </span><span class="m">22</span>:16193549:C:T<span class="w">     </span><span class="m">0</span>.336477
+<span class="m">22</span><span class="w">     </span><span class="m">16149743</span><span class="w">   </span><span class="m">22</span>:16149743:T:A<span class="w">     </span><span class="m">22</span><span class="w">     </span><span class="m">16212542</span><span class="w">   </span><span class="m">22</span>:16212542:C:T<span class="w">     </span><span class="m">0</span>.442424
+</code></pre></div>
+</div>
+<h3 id="data-management-make-bedrecode">Data management (make-bed/recode)</h3>
+<p>By far the input data we use is in binary form, but sometimes we may want the text version.</p>
+<div class="admonition info format conversion">
+<p class="admonition-title">Info</p>
+<p><img alt="image" src="https://user-images.githubusercontent.com/40289485/161413659-a489b508-63c7-4166-9f5c-25a1a125109a.png" /></p>
+</div>
+<p>To convert the formats, we can run:</p>
+<div class="admonition example">
+<p class="admonition-title">Convert PLINK formats</p>
+<div class="highlight"><pre><span></span><code><span class="c1">#extract the 1000 samples with the pruned SNPs, and make a bed file.</span>
+plink<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--extract<span class="w"> </span>plink_results.prune.in<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--make-bed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>plink_1000_pruned
+
+<span class="c1">#convert the bed/bim/fam to ped/map</span>
+plink<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--bfile<span class="w"> </span>plink_1000_pruned<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--recode<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--out<span class="w"> </span>plink_1000_pruned
+</code></pre></div>
+</div>
+<h2 id="apply-all-the-filters-to-obtain-a-clean-dataset">Apply all the filters to obtain a clean dataset</h2>
+<p>We can then apply the filters and remove samples with high <span class="arithmatex">\(F_{het}\)</span> to get a clean dataset for later use.</p>
+<div class="highlight"><pre><span></span><code>plink<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--bfile<span class="w"> </span><span class="si">${</span><span class="nv">genotypeFile</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--maf<span class="w"> </span><span class="m">0</span>.01<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--geno<span class="w"> </span><span class="m">0</span>.02<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--mind<span class="w"> </span><span class="m">0</span>.02<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--hwe<span class="w"> </span>1e-6<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--remove<span class="w"> </span>high_het.sample<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--keep-allele-order<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--make-bed<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--out<span class="w"> </span>sample_data.clean
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>1224104 variants and 500 people pass filters and QC.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>-rw-r--r--  1 yunye yunye 146M Dec 26 15:40 sample_data.clean.bed
+-rw-r--r--  1 yunye yunye  39M Dec 26 15:40 sample_data.clean.bim
+-rw-r--r--  1 yunye yunye  13K Dec 26 15:40 sample_data.clean.fam
+</code></pre></div>
+<h2 id="other-common-qc-steps-not-included-in-this-tutorial">Other common QC steps not included in this tutorial</h2>
+<ul>
+<li>check-sex: compares sex assignments in the input dataset with those imputed from X chromosome inbreeding coefficients <a href="https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex">https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex</a></li>
+<li>case/control nonrandom missingness test:  detect platform/batch differences between case and control genotype data by performing Fisher's exact test on case/control missing call counts at each variant. <a href="https://www.cog-genomics.org/plink/1.9/assoc#test_missing">https://www.cog-genomics.org/plink/1.9/assoc#test_missing</a></li>
+</ul>
+<h2 id="exercise">Exercise</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Follow this tutorial and type in the commands:</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Calculate basic statistics for the simulated data.</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Learn the meaning of each QC step.</p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Visualize the results of QC (using Python or R)</p>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Draw the distribution of MAF.(histogram)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Draw the distribution of het.(histogram)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Try to briefly explain what you observe</li>
+</ul>
+<h2 id="additional-resources">Additional resources</h2>
+<ul>
+<li>Marees, A. T., de Kluiver, H., Stringer, S., Vorspan, F., Curis, E., Marie‐Claire, C., &amp; Derks, E. M. (2018). A tutorial on conducting genome‐wide association studies: Quality control and statistical analysis. International journal of methods in psychiatric research, 27(2), e1608.</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<ul>
+<li>Purcell, S., Neale, B., Todd-Brown, K., Thomas, L., Ferreira, M. A., Bender, D., ... &amp; Sham, P. C. (2007). PLINK: a tool set for whole-genome association and population-based linkage analyses. The American journal of human genetics, 81(3), 559-575.</li>
+<li>Chang, C. C., Chow, C. C., Tellier, L. C., Vattikuti, S., Purcell, S. M., &amp; Lee, J. J. (2015). Second-generation PLINK: rising to the challenge of larger and richer datasets. Gigascience, 4(1), s13742-015.</li>
+<li>Manichaikul, A., Mychaleckyj, J. C., Rich, S. S., Daly, K., Sale, M., &amp; Chen, W. M. (2010). Robust relationship inference in genome-wide association studies. Bioinformatics, 26(22), 2867-2873.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      GWASTutorial is licensed under the MIT license
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.top", "navigation.tracking", "navigation.path"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

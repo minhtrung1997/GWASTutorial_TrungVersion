@@ -1,0 +1,3024 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="HE Yunye">
+      
+      
+      
+        <link rel="prev" href="../14_gcta_greml/">
+      
+      
+        <link rel="next" href="../09_Gene_based_analysis/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>LD score regression by LDSC - GWASTutorial</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e53b48f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ld-score-regression" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="GWASTutorial" class="md-header__button md-logo" aria-label="GWASTutorial" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GWASTutorial
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              LD score regression by LDSC
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Cloufield/GWASTutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
+  
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../02_Linux_basics/" class="md-tabs__link">
+          
+  
+  
+  Command Line
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../01_Dataset/" class="md-tabs__link">
+          
+  
+  
+  Pre-GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../06_Association_tests/" class="md-tabs__link">
+          
+  
+  
+  GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../07_Annotation/" class="md-tabs__link">
+          
+  
+  
+  Post-GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../19_ld/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../95_Assignment/" class="md-tabs__link">
+          
+  
+  
+  Assignments
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="GWASTutorial" class="md-nav__button md-logo" aria-label="GWASTutorial" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    GWASTutorial
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Cloufield/GWASTutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Home
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tutorial guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../99_About/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Command Line
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Command Line
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_Linux_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../82_windows_linux_subsystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows Linux Subsystem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../84_ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SSH
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../85_job_scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Job scheduler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../60_awk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text editing - awk
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../61_sed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text editing - sed
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../69_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Python
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../70_python_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../71_python_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../80_miniconda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anaconda
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../81_jupyter_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Jupyter notebook
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    R
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            R
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../75_R_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    R Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../76_R_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    R Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Other tools
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Other tools
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../83_git_and_github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Git and github
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pre-GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Pre-GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_Dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample Dataset
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_Data_formats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Formats
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_Data_QC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Genotype Data QC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_PCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot_PCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotting PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Phasing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phasing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Imputation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Imputation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_Association_tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Association tests by PLINK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Visualization by gwaslab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33_linear_mixed_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linear mixed model (LMM)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32_whole_genome_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Whole genome regression by REGENIE
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Post-GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Post-GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_Annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Annotation by ANNOVAR & VEP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_gcta_greml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SNP-heritability estimation by GREML
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    LD score regression by LDSC
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    LD score regression by LDSC
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ld-linkage-disequilibrium" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD: Linkage disequilibrium
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD score
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-score-regression_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD score regression
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-ldsc" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install LDSC
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Preparation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download-sample-summary-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download sample summary statistics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-reference-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download reference files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#munge-sumstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Munge sumstats
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ld-score-regression_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD score regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distribution-of-h2-and-intercept-across-traits-in-ukb" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution of h2 and intercept across traits in UKB
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-trait-ld-score-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-trait LD score regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioned-ld-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Partitioned LD regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#celltype-specificity-ld-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Celltype specificity LD regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_Gene_based_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gene/Gene-set tests by MAGMA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Fine-mapping by susieR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            Fine-mapping by susieR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_fine_mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fine-mapping Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finemapping_susie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Finemapping using susieR
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_meta_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Meta-analysis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Polygenic Risk Score
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            Polygenic Risk Score
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_PRS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PRS_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prs_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Mendelian randomization
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_8">
+            <span class="md-nav__icon md-icon"></span>
+            Mendelian randomization
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_mendelian_randomization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MR Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TwoSampleMR/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TwoSampleMR Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18_Conditioning_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional analysis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17_colocalization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colocalization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21_twas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TWAS (using FUSION)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Topics
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Topics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19_ld/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linkage Disequilibrium (LD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_heritability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Heritability Concepts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20_power_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Statistical power
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_winners_curse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Winner's curse
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../55_measure_of_effect/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Measure of effect
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../90_Recommended_Reading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recommended reading
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Assignments
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Assignments
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../95_Assignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assignment - 1KG PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../96_Assignment2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assignment - Presentation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ld-linkage-disequilibrium" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD: Linkage disequilibrium
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD score
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ld-score-regression_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD score regression
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-ldsc" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install LDSC
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Preparation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download-sample-summary-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download sample summary statistics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-reference-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download reference files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#munge-sumstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Munge sumstats
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ld-score-regression_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      LD score regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distribution-of-h2-and-intercept-across-traits-in-ukb" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution of h2 and intercept across traits in UKB
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-trait-ld-score-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-trait LD score regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioned-ld-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Partitioned LD regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#celltype-specificity-ld-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Celltype specificity LD regression
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ld-score-regression">LD score regression</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#ld-score-regression">LD score regression</a></li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#ld-linkage-disequilibrium">LD: Linkage disequilibrium</a></li>
+<li><a href="#ld-score">LD score</a></li>
+<li><a href="#ld-score-regression-1">LD score regression</a></li>
+</ul>
+</li>
+<li><a href="#install-ldsc">Install LDSC</a></li>
+<li><a href="#data-preparation">Data Preparation</a><ul>
+<li><a href="#download-sample-summary-statistics">Download sample summary statistics</a></li>
+<li><a href="#download-reference-files">Download reference files</a></li>
+</ul>
+</li>
+<li><a href="#munge-sumstats">Munge sumstats</a></li>
+<li><a href="#ld-score-regression-2">LD score regression</a></li>
+<li><a href="#distribution-of-h2-and-intercept-across-traits-in-ukb">Distribution of h2 and intercept across traits in UKB</a></li>
+<li><a href="#cross-trait-ld-score-regression">Cross-trait LD score regression</a></li>
+<li><a href="#partitioned-ld-regression">Partitioned LD regression</a></li>
+<li><a href="#celltype-specificity-ld-regression">Celltype specificity LD regression</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>LDSC is one of the most commonly used command line tool to estimate inflation, hertability, genetic correlation and cell/tissue type specificity from GWAS summary statistics. </p>
+<h3 id="ld-linkage-disequilibrium">LD: Linkage disequilibrium</h3>
+<p>Linkage disequilibrium (LD) :  non-random association of alleles at different loci in a given population. (<a href="https://en.wikipedia.org/wiki/Linkage_disequilibrium">Wiki</a>)</p>
+<h3 id="ld-score">LD score</h3>
+<p>LD score <span class="arithmatex">\(l_j\)</span> for a SNP <span class="arithmatex">\(j\)</span> is defined as the sum of <span class="arithmatex">\(r^2\)</span> for the SNP and other SNPs in a region. </p>
+<div class="arithmatex">\[
+l_j= \Sigma_k{r^2_{j,k}}
+\]</div>
+<h3 id="ld-score-regression_1">LD score regression</h3>
+<p>Key idea: A variant will have higher test statistics if it is in LD with causal variant, and the elevation is proportional to the correlation ( <span class="arithmatex">\(r^2\)</span> ) with the causal variant.  </p>
+<div class="arithmatex">\[
+E[\chi^2|l_j] = {{Nh^2l_j}\over{M}} + Na + 1
+\]</div>
+<ul>
+<li><span class="arithmatex">\(N\)</span>: sample size.</li>
+<li><span class="arithmatex">\(M\)</span> : number of SNPs.</li>
+<li><span class="arithmatex">\(h^2\)</span> : observed-scale heritability</li>
+<li><span class="arithmatex">\(a\)</span> : the effect of confounding factors, including crytic relatedness and populatiuon stratification.</li>
+</ul>
+<p>For more details of LD score regression, please refer to :
+- Bulik-Sullivan, Brendan K., et al. "LD Score regression distinguishes confounding from polygenicity in genome-wide association studies." Nature genetics 47.3 (2015): 291-295.</p>
+<h2 id="install-ldsc">Install LDSC</h2>
+<p>LDSC can be downloaded from github (GPL-3.0 license):
+<a href="https://github.com/bulik/ldsc">https://github.com/bulik/ldsc</a></p>
+<p>For ldsc, we need anaconda to create virtual environment (for python2). 
+If you haven't installed Anaconda, please check <a href="https://cloufield.github.io/GWASTutorial/80_anaconda/">how to install anaconda</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># change to your directory for tools</span>
+<span class="nb">cd</span><span class="w"> </span>~/tools
+
+<span class="c1"># clone the ldsc github repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/bulik/ldsc.git
+
+<span class="c1"># create a virtual environment for ldsc (python2)</span>
+<span class="nb">cd</span><span class="w"> </span>ldsc
+conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>environment.yml<span class="w">  </span>
+
+<span class="c1"># activate ldsc environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>ldsc
+</code></pre></div>
+<h2 id="data-preparation">Data Preparation</h2>
+<p>In this tutoial, we will use sample summary statistics for HDLC and LDLC from Jenger. 
+- Kanai, Masahiro, et al. "Genetic analysis of quantitative traits in the Japanese population links cell types to complex human diseases." Nature genetics 50.3 (2018): 390-400.</p>
+<p>The Miami plot for the two traits:</p>
+<p><img width="682" alt="image" src="https://user-images.githubusercontent.com/40289485/209749071-171c150a-19aa-41f0-b6e6-2ef5fa87370d.png"></p>
+<h3 id="download-sample-summary-statistics">Download sample summary statistics</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># HDL-c and LDL-c in Biobank Japan</span>
+wget<span class="w"> </span>-O<span class="w"> </span>BBJ_LDLC.txt.gz<span class="w"> </span>http://jenger.riken.jp/61analysisresult_qtl_download/
+wget<span class="w"> </span>-O<span class="w"> </span>BBJ_HDLC.txt.gz<span class="w"> </span>http://jenger.riken.jp/47analysisresult_qtl_download/
+</code></pre></div>
+<h3 id="download-reference-files">Download reference files</h3>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># change to your ldsc directory</span>
+<span class="nb">cd</span><span class="w"> </span>~/tools/ldsc
+mkdir<span class="w"> </span>resource
+<span class="nb">cd</span><span class="w"> </span>./resource
+
+<span class="c1"># snplist</span>
+gsutil<span class="w"> </span>-u<span class="w"> </span>&lt;project_name&gt;<span class="w"> </span>cp<span class="w"> </span>gs://broad-alkesgroup-public-requester-pays/LDSCORE/w_hm3.snplist.bz2<span class="w"> </span>.
+
+<span class="c1"># EAS ld score files</span>
+gsutil<span class="w"> </span>-u<span class="w"> </span>&lt;project_name&gt;<span class="w"> </span>cp<span class="w"> </span>gs://broad-alkesgroup-public-requester-pays/LDSCORE/eas_ldscores.tar.bz2<span class="w"> </span>.
+
+<span class="c1"># EAS weight</span>
+gsutil<span class="w"> </span>-u<span class="w"> </span>&lt;project_name&gt;<span class="w"> </span>cp<span class="w"> </span>gs://broad-alkesgroup-public-requester-pays/LDSCORE/1000G_Phase3_EAS_weights_hm3_no_MHC.tgz<span class="w"> </span>.
+
+<span class="c1"># EAS frequency</span>
+gsutil<span class="w"> </span>-u<span class="w"> </span>&lt;project_name&gt;<span class="w"> </span>cp<span class="w"> </span>gs://broad-alkesgroup-public-requester-pays/LDSCORE/1000G_Phase3_EAS_plinkfiles.tgz<span class="w"> </span>.
+
+<span class="c1"># EAS baseline model</span>
+gsutil<span class="w"> </span>-u<span class="w"> </span>&lt;project_name&gt;<span class="w"> </span>cp<span class="w"> </span>gs://broad-alkesgroup-public-requester-pays/LDSCORE/1000G_Phase3_EAS_baseline_v1.2_ldscores.tgz<span class="w"> </span>.
+
+<span class="c1"># Cell type ld score files</span>
+gsutil<span class="w"> </span>-u<span class="w"> </span>&lt;project_name&gt;<span class="w"> </span>cp<span class="w"> </span>gs://broad-alkesgroup-public-requester-pays/LDSCORE/LDSC_SEG_ldscores/Cahoy_EAS_1000Gv3_ldscores.tar.gz<span class="w"> </span>.
+</code></pre></div>
+You can then decompress the files and organize them.</p>
+<h2 id="munge-sumstats">Munge sumstats</h2>
+<p>Before the analysis, we need to format and clean the raw sumstats.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+</div>
+<p>Rsid is used here. If the sumstats only contained id like CHR:POS:REF:ALT, annotate it first.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">snplist</span><span class="o">=</span>~/tools/ldsc/resource/w_hm3.snplist
+munge_sumstats.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--sumstats<span class="w"> </span>BBJ_HDLC.txt.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--merge-alleles<span class="w"> </span><span class="nv">$snplist</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--a1<span class="w"> </span>ALT<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--a2<span class="w"> </span>REF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--chunksize<span class="w"> </span><span class="m">500000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>BBJ_HDLC
+munge_sumstats.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--sumstats<span class="w"> </span>BBJ_LDLC.txt.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--a1<span class="w"> </span>ALT<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--a2<span class="w"> </span>REF<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--chunksize<span class="w"> </span><span class="m">500000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--merge-alleles<span class="w"> </span><span class="nv">$snplist</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out<span class="w"> </span>BBJ_LDLC
+</code></pre></div>
+<p>After munging, you will get two munged and formatted files:</p>
+<p><div class="highlight"><pre><span></span><code>BBJ_HDLC.sumstats.gz
+BBJ_LDLC.sumstats.gz
+</code></pre></div>
+And these are the files we will use to run LD score regression.</p>
+<h2 id="ld-score-regression_2">LD score regression</h2>
+<p>Univariate LD score regression is utilized to estimate heritbility and confuding factors (cryptic relateness and population stratification) of a certain trait. </p>
+<ul>
+<li>Reference : Bulik-Sullivan, Brendan K., et al. "LD Score regression distinguishes confounding from polygenicity in genome-wide association studies." Nature genetics 47.3 (2015): 291-295.</li>
+</ul>
+<p>Using the munged sumstats, we can run:</p>
+<div class="highlight"><pre><span></span><code>ldsc.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--h2<span class="w"> </span>BBJ_HDLC.sumstats.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ref-ld-chr<span class="w"> </span>~/tools/ldsc/resource/eas_ldscores/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--w-ld-chr<span class="w"> </span>~/tools/ldsc/resource/eas_ldscores/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out<span class="w"> </span>BBJ_HDLC
+
+ldsc.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--h2<span class="w"> </span>BBJ_LDLC.sumstats.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ref-ld-chr<span class="w"> </span>~/tools/ldsc/resource/eas_ldscores/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--w-ld-chr<span class="w"> </span>~/tools/ldsc/resource/eas_ldscores/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out<span class="w"> </span>BBJ_LDLC
+</code></pre></div>
+<p>Lest's check the results for HDLC:</p>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>BBJ_HDLC.log
+*********************************************************************
+*<span class="w"> </span>LD<span class="w"> </span>Score<span class="w"> </span>Regression<span class="w"> </span><span class="o">(</span>LDSC<span class="o">)</span>
+*<span class="w"> </span>Version<span class="w"> </span><span class="m">1</span>.0.1
+*<span class="w"> </span><span class="o">(</span>C<span class="o">)</span><span class="w"> </span><span class="m">2014</span>-2019<span class="w"> </span>Brendan<span class="w"> </span>Bulik-Sullivan<span class="w"> </span>and<span class="w"> </span>Hilary<span class="w"> </span>Finucane
+*<span class="w"> </span>Broad<span class="w"> </span>Institute<span class="w"> </span>of<span class="w"> </span>MIT<span class="w"> </span>and<span class="w"> </span>Harvard<span class="w"> </span>/<span class="w"> </span>MIT<span class="w"> </span>Department<span class="w"> </span>of<span class="w"> </span>Mathematics
+*<span class="w"> </span>GNU<span class="w"> </span>General<span class="w"> </span>Public<span class="w"> </span>License<span class="w"> </span>v3
+*********************************************************************
+Call:<span class="w"> </span>
+./ldsc.py<span class="w"> </span><span class="se">\</span>
+--h2<span class="w"> </span>BBJ_HDLC.sumstats.gz<span class="w"> </span><span class="se">\</span>
+--ref-ld-chr<span class="w"> </span>/home/he/tools/ldsc/resource/eas_ldscores/<span class="w"> </span><span class="se">\</span>
+--out<span class="w"> </span>BBJ_HDLC<span class="w"> </span><span class="se">\</span>
+--w-ld-chr<span class="w"> </span>/home/he/tools/ldsc/resource/eas_ldscores/<span class="w"> </span>
+
+Beginning<span class="w"> </span>analysis<span class="w"> </span>at<span class="w"> </span>Sat<span class="w"> </span>Dec<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">20</span>:40:34<span class="w"> </span><span class="m">2022</span>
+Reading<span class="w"> </span>summary<span class="w"> </span>statistics<span class="w"> </span>from<span class="w"> </span>BBJ_HDLC.sumstats.gz<span class="w"> </span>...
+Read<span class="w"> </span>summary<span class="w"> </span>statistics<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="m">1020377</span><span class="w"> </span>SNPs.
+Reading<span class="w"> </span>reference<span class="w"> </span>panel<span class="w"> </span>LD<span class="w"> </span>Score<span class="w"> </span>from<span class="w"> </span>/home/he/tools/ldsc/resource/eas_ldscores/<span class="o">[</span><span class="m">1</span>-22<span class="o">]</span><span class="w"> </span>...<span class="w"> </span><span class="o">(</span>ldscore_fromlist<span class="o">)</span>
+Read<span class="w"> </span>reference<span class="w"> </span>panel<span class="w"> </span>LD<span class="w"> </span>Scores<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="m">1208050</span><span class="w"> </span>SNPs.
+Removing<span class="w"> </span>partitioned<span class="w"> </span>LD<span class="w"> </span>Scores<span class="w"> </span>with<span class="w"> </span>zero<span class="w"> </span>variance.
+Reading<span class="w"> </span>regression<span class="w"> </span>weight<span class="w"> </span>LD<span class="w"> </span>Score<span class="w"> </span>from<span class="w"> </span>/home/he/tools/ldsc/resource/eas_ldscores/<span class="o">[</span><span class="m">1</span>-22<span class="o">]</span><span class="w"> </span>...<span class="w"> </span><span class="o">(</span>ldscore_fromlist<span class="o">)</span>
+Read<span class="w"> </span>regression<span class="w"> </span>weight<span class="w"> </span>LD<span class="w"> </span>Scores<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="m">1208050</span><span class="w"> </span>SNPs.
+After<span class="w"> </span>merging<span class="w"> </span>with<span class="w"> </span>reference<span class="w"> </span>panel<span class="w"> </span>LD,<span class="w"> </span><span class="m">1012040</span><span class="w"> </span>SNPs<span class="w"> </span>remain.
+After<span class="w"> </span>merging<span class="w"> </span>with<span class="w"> </span>regression<span class="w"> </span>SNP<span class="w"> </span>LD,<span class="w"> </span><span class="m">1012040</span><span class="w"> </span>SNPs<span class="w"> </span>remain.
+Using<span class="w"> </span>two-step<span class="w"> </span>estimator<span class="w"> </span>with<span class="w"> </span>cutoff<span class="w"> </span>at<span class="w"> </span><span class="m">30</span>.
+Total<span class="w"> </span>Observed<span class="w"> </span>scale<span class="w"> </span>h2:<span class="w"> </span><span class="m">0</span>.1583<span class="w"> </span><span class="o">(</span><span class="m">0</span>.0281<span class="o">)</span>
+Lambda<span class="w"> </span>GC:<span class="w"> </span><span class="m">1</span>.1523
+Mean<span class="w"> </span>Chi^2:<span class="w"> </span><span class="m">1</span>.2843
+Intercept:<span class="w"> </span><span class="m">1</span>.0563<span class="w"> </span><span class="o">(</span><span class="m">0</span>.0114<span class="o">)</span>
+Ratio:<span class="w"> </span><span class="m">0</span>.1981<span class="w"> </span><span class="o">(</span><span class="m">0</span>.0402<span class="o">)</span>
+Analysis<span class="w"> </span>finished<span class="w"> </span>at<span class="w"> </span>Sat<span class="w"> </span>Dec<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">20</span>:40:41<span class="w"> </span><span class="m">2022</span>
+Total<span class="w"> </span><span class="nb">time</span><span class="w"> </span>elapsed:<span class="w"> </span><span class="m">6</span>.57s
+</code></pre></div>
+<p>We can see that from the log:</p>
+<ul>
+<li>Observed scale h2 = 0.1583</li>
+<li>lambda GC = 1.1523 </li>
+<li>intercept = 1.0563</li>
+<li>Ratio = 0.1981</li>
+</ul>
+<p>According to LDSC documents, Ratio measures the proportion of the inflation in the mean chi^2 that the LD Score regression intercept ascribes to causes other than polygenic heritability. The value of ratio should be close to zero, though in practice values of 10-20% are not uncommon.</p>
+<div class="arithmatex">\[
+Ratio = {{intercept-1}\over{mean(\chi^2)-1}}
+\]</div>
+<h2 id="distribution-of-h2-and-intercept-across-traits-in-ukb">Distribution of h2 and intercept across traits in UKB</h2>
+<p>The Neale Lab estimated SNP heritability using LDSC across more than 4,000 primary GWAS in UKB. You can check the distributions of SNP heritability and intercept estimates using the following link to get the idea of what you can expect from LD score regresion:</p>
+<p>https://nealelab.github.io/UKBB_ldsc/viz_h2.html</p>
+<h2 id="cross-trait-ld-score-regression">Cross-trait LD score regression</h2>
+<p>Cross-trait LD score regression is employed to estimate the genetic correlation between a pair of traits.</p>
+<p>Key idea: replace <code>\chi^2</code> in univariate LD score regression and the relationship (SNPs with high LD ) still holds.</p>
+<div class="arithmatex">\[
+E[z_{1j}z_{2j}] = {{\sqrt{N_1N_2}\rho_g}\over{M}}l_j + {{\rho N_s}\over{\sqrt{N_1N_2}}}
+\]</div>
+<ul>
+<li><span class="arithmatex">\(z_ij\)</span> : z score of trait i for SNP j</li>
+<li><span class="arithmatex">\(N_i\)</span> : sample size of trait i</li>
+<li><span class="arithmatex">\(\rho\)</span> : phenotypic correlation</li>
+<li><span class="arithmatex">\(\rho_g\)</span> : genetic covariance </li>
+<li><span class="arithmatex">\(l_j\)</span> : LD score</li>
+<li><span class="arithmatex">\(M\)</span> : number of SNPs</li>
+</ul>
+<p>Then we can get the genetic correlation by :</p>
+<div class="arithmatex">\[
+r_g = {{\rho_g}\over{\sqrt{h_1^2h_2^2}}}
+\]</div>
+<ul>
+<li>Reference: Bulik-Sullivan, Brendan, et al. "An atlas of genetic correlations across human diseases and traits." Nature genetics 47.11 (2015): 1236-1241.</li>
+</ul>
+<p><div class="highlight"><pre><span></span><code>ldsc.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--rg<span class="w"> </span>BBJ_HDLC.sumstats.gz,BBJ_LDLC.sumstats.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ref-ld-chr<span class="w"> </span>~/tools/ldsc/resource/eas_ldscores/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--w-ld-chr<span class="w"> </span>~/tools/ldsc/resource/eas_ldscores/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out<span class="w"> </span>BBJ_HDLC_LDLC
+</code></pre></div>
+Let's check the results:</p>
+<div class="highlight"><pre><span></span><code>*********************************************************************
+* LD Score Regression (LDSC)
+* Version 1.0.1
+* (C) 2014-2019 Brendan Bulik-Sullivan and Hilary Finucane
+* Broad Institute of MIT and Harvard / MIT Department of Mathematics
+* GNU General Public License v3
+*********************************************************************
+Call: 
+./ldsc.py \
+--ref-ld-chr /home/he/tools/ldsc/resource/eas_ldscores/ \
+--out BBJ_HDLC_LDLC \
+--rg BBJ_HDLC.sumstats.gz,BBJ_LDLC.sumstats.gz \
+--w-ld-chr /home/he/tools/ldsc/resource/eas_ldscores/ 
+
+Beginning analysis at Thu Dec 29 21:02:37 2022
+Reading summary statistics from BBJ_HDLC.sumstats.gz ...
+Read summary statistics for 1020377 SNPs.
+Reading reference panel LD Score from /home/he/tools/ldsc/resource/eas_ldscores/[1-22] ... (ldscore_fromlist)
+Read reference panel LD Scores for 1208050 SNPs.
+Removing partitioned LD Scores with zero variance.
+Reading regression weight LD Score from /home/he/tools/ldsc/resource/eas_ldscores/[1-22] ... (ldscore_fromlist)
+Read regression weight LD Scores for 1208050 SNPs.
+After merging with reference panel LD, 1012040 SNPs remain.
+After merging with regression SNP LD, 1012040 SNPs remain.
+Computing rg for phenotype 2/2
+Reading summary statistics from BBJ_LDLC.sumstats.gz ...
+Read summary statistics for 1217311 SNPs.
+After merging with summary statistics, 1012040 SNPs remain.
+1012040 SNPs with valid alleles.
+
+Heritability of phenotype 1
+---------------------------
+Total Observed scale h2: 0.1054 (0.0383)
+Lambda GC: 1.1523
+Mean Chi^2: 1.2843
+Intercept: 1.1234 (0.0607)
+Ratio: 0.4342 (0.2134)
+
+Heritability of phenotype 2/2
+-----------------------------
+Total Observed scale h2: 0.0543 (0.0211)
+Lambda GC: 1.0833
+Mean Chi^2: 1.1465
+Intercept: 1.0583 (0.0335)
+Ratio: 0.398 (0.2286)
+
+Genetic Covariance
+------------------
+Total Observed scale gencov: 0.0121 (0.0106)
+Mean z1*z2: -0.001
+Intercept: -0.0198 (0.0121)
+
+Genetic Correlation
+-------------------
+Genetic Correlation: 0.1601 (0.1821)
+Z-score: 0.8794
+P: 0.3792
+
+
+Summary of Genetic Correlation Results
+p1                    p2      rg      se       z       p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+BBJ_HDLC.sumstats.gz  BBJ_LDLC.sumstats.gz  0.1601  0.1821  0.8794  0.3792  0.0543     0.0211  1.0583     0.0335   -0.0198       0.0121
+
+Analysis finished at Thu Dec 29 21:02:47 2022
+Total time elapsed: 10.39s
+</code></pre></div>
+<h2 id="partitioned-ld-regression">Partitioned LD regression</h2>
+<p>Partitioned LD regression is utilized to evaluate the contribution of each functional group to the total SNP heriatbility.</p>
+<div class="arithmatex">\[
+E[\chi^2] = N \sum\limits_C \tau_C l(j,C) + Na + 1
+\]</div>
+<ul>
+<li><span class="arithmatex">\(C\)</span> : functional categories</li>
+<li><span class="arithmatex">\(l(j,C)\)</span> : LD score for SNP j with respect to C. </li>
+<li>
+<p><span class="arithmatex">\(\tau_C\)</span> : per-SNP contribution of category C to heritability</p>
+</li>
+<li>
+<p>Reference: Finucane, Hilary K., et al. "Partitioning heritability by functional annotation using genome-wide association summary statistics." Nature genetics 47.11 (2015): 1228-1235.</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>ldsc.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--h2<span class="w"> </span>BBJ_HDLC.sumstats.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--overlap-annot<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ref-ld-chr<span class="w"> </span>~/tools/ldsc/resource/1000G_Phase3_EAS_baseline_v1_2_ldscores/baseline.<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--frqfile-chr<span class="w"> </span>~/tools/ldsc/resource/1000G_Phase3_EAS_plinkfiles/1000G.EAS.QC.<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--w-ld-chr<span class="w"> </span>~/tools/ldsc/resource/1000G_Phase3_EAS_weights_hm3_no_MHC/weights.EAS.hm3_noMHC.<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out<span class="w"> </span>BBJ_HDLC_baseline
+</code></pre></div>
+<h2 id="celltype-specificity-ld-regression">Celltype specificity LD regression</h2>
+<p>LDSC-SEG :  LD score regression applied to specifically expressed genes</p>
+<p>An extension of Partitioned LD regression. Categories are defined by tissue or cell-type specific genes.</p>
+<ul>
+<li>Reference: Finucane, Hilary K., et al. "Heritability enrichment of specifically expressed genes identifies disease-relevant tissues and cell types." Nature genetics 50.4 (2018): 621-629.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>ldsc.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--h2-cts<span class="w"> </span>BBJ_HDLC.sumstats.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ref-ld-chr-cts<span class="w"> </span>~/tools/ldsc/resource/Cahoy_EAS_1000Gv3_ldscores/Cahoy.EAS.ldcts<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ref-ld-chr<span class="w"> </span>~/tools/ldsc/resource/1000G_Phase3_EAS_baseline_v1_2_ldscores/baseline.<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--w-ld-chr<span class="w"> </span>~/tools/ldsc/resource/1000G_Phase3_EAS_weights_hm3_no_MHC/weights.EAS.hm3_noMHC.<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out<span class="w"> </span>BBJ_HDLC_baseline_cts
+</code></pre></div>
+<h2 id="reference">Reference</h2>
+<ul>
+<li>Bulik-Sullivan, Brendan K., et al. "LD Score regression distinguishes confounding from polygenicity in genome-wide association studies." Nature genetics 47.3 (2015): 291-295.</li>
+<li>Bulik-Sullivan, Brendan, et al. "An atlas of genetic correlations across human diseases and traits." Nature genetics 47.11 (2015): 1236-1241.</li>
+<li>Finucane, Hilary K., et al. "Partitioning heritability by functional annotation using genome-wide association summary statistics." Nature genetics 47.11 (2015): 1228-1235.</li>
+<li>Finucane, Hilary K., et al. "Heritability enrichment of specifically expressed genes identifies disease-relevant tissues and cell types." Nature genetics 50.4 (2018): 621-629.</li>
+<li>Kanai, Masahiro, et al. "Genetic analysis of quantitative traits in the Japanese population links cell types to complex human diseases." Nature genetics 50.3 (2018): 390-400.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      GWASTutorial is licensed under the MIT license
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.top", "navigation.tracking", "navigation.path"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

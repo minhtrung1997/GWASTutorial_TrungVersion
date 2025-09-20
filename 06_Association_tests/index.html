@@ -1,0 +1,2924 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="HE Yunye">
+      
+      
+      
+        <link rel="prev" href="../Imputation/">
+      
+      
+        <link rel="next" href="../Visualization/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>Association tests by PLINK - GWASTutorial</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e53b48f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#association-test" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="GWASTutorial" class="md-header__button md-logo" aria-label="GWASTutorial" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GWASTutorial
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Association tests by PLINK
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Cloufield/GWASTutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
+  
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../02_Linux_basics/" class="md-tabs__link">
+          
+  
+  
+  Command Line
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../01_Dataset/" class="md-tabs__link">
+          
+  
+  
+  Pre-GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../07_Annotation/" class="md-tabs__link">
+          
+  
+  
+  Post-GWAS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../19_ld/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../95_Assignment/" class="md-tabs__link">
+          
+  
+  
+  Assignments
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="GWASTutorial" class="md-nav__button md-logo" aria-label="GWASTutorial" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    GWASTutorial
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Cloufield/GWASTutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Home
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tutorial guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../99_About/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Command Line
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Command Line
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_Linux_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../82_windows_linux_subsystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows Linux Subsystem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../84_ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SSH
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../85_job_scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Job scheduler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../60_awk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text editing - awk
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../61_sed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text editing - sed
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../69_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Python
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../70_python_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../71_python_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../80_miniconda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anaconda
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../81_jupyter_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Jupyter notebook
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    R
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            R
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../75_R_basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    R Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../76_R_resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    R Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Other tools
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Other tools
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../83_git_and_github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Git and github
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pre-GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Pre-GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_Dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample Dataset
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_Data_formats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Formats
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_Data_QC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Genotype Data QC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_PCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot_PCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotting PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Phasing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phasing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Imputation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Imputation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Association tests by PLINK
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Association tests by PLINK
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#genetic-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genetic models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#association-testing-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Association testing basics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Preparation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#association-tests-using-plink" class="md-nav__link">
+    <span class="md-ellipsis">
+      Association tests using PLINK
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#genomic-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genomic control
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#significant-loci" class="md-nav__link">
+    <span class="md-ellipsis">
+      Significant loci
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Visualization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manhattan-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manhattan plot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quantile-quantile-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quantile-quantile plot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regional-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Regional plot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gwas-ssf" class="md-nav__link">
+    <span class="md-ellipsis">
+      GWAS-SSF
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Visualization by gwaslab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33_linear_mixed_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linear mixed model (LMM)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32_whole_genome_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Whole genome regression by REGENIE
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Post-GWAS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Post-GWAS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_Annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Annotation by ANNOVAR & VEP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_gcta_greml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SNP-heritability estimation by GREML
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_LDSC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LD score regression by LDSC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_Gene_based_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gene/Gene-set tests by MAGMA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Fine-mapping by susieR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            Fine-mapping by susieR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_fine_mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fine-mapping Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finemapping_susie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Finemapping using susieR
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_meta_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Meta-analysis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Polygenic Risk Score
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            Polygenic Risk Score
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_PRS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PRS_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prs_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PRS Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Mendelian randomization
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_8">
+            <span class="md-nav__icon md-icon"></span>
+            Mendelian randomization
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_mendelian_randomization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MR Basics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TwoSampleMR/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TwoSampleMR Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18_Conditioning_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional analysis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17_colocalization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colocalization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21_twas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TWAS (using FUSION)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Topics
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Topics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19_ld/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linkage Disequilibrium (LD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_heritability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Heritability Concepts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20_power_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Statistical power
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_winners_curse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Winner's curse
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../55_measure_of_effect/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Measure of effect
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../90_Recommended_Reading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recommended reading
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Assignments
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Assignments
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../95_Assignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assignment - 1KG PCA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../96_Assignment2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assignment - Presentation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#genetic-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genetic models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#association-testing-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Association testing basics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Preparation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#association-tests-using-plink" class="md-nav__link">
+    <span class="md-ellipsis">
+      Association tests using PLINK
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#genomic-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genomic control
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#significant-loci" class="md-nav__link">
+    <span class="md-ellipsis">
+      Significant loci
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Visualization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manhattan-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manhattan plot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quantile-quantile-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quantile-quantile plot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regional-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Regional plot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gwas-ssf" class="md-nav__link">
+    <span class="md-ellipsis">
+      GWAS-SSF
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="association-test">Association test</h1>
+<h2 id="overview">Overview</h2>
+<p><img width="900" alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/1e4ab229-6f5a-44a0-9850-81244944b969"></p>
+<h2 id="genetic-models">Genetic models</h2>
+<p>To test the association between a phenotype and genotypes, we need to group the genotypes based on genetic models.</p>
+<p>There are three basic genetic models:</p>
+<ul>
+<li>Additive model (ADD)</li>
+<li>Dominant model (DOM)</li>
+<li>Recessive model (REC)</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Three genetic models</p>
+<p>For example, suppose we have a biallelic SNP whose reference allele is A and the alternative allele is G.</p>
+<p>There are three possible genotypes for this SNP: AA, AG, and GG.</p>
+<p>This table shows how we group different genotypes under each genetic model for association tests using linear or logistic regressions.</p>
+<table>
+<thead>
+<tr>
+<th>Genetic models</th>
+<th>AA</th>
+<th>AG</th>
+<th>GG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Additive model</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Dominant model</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Recessive model</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Contingency table and non-parametric tests</p>
+<p>A simple way to test association is to use the 2x2 or 2x3 contingency table. For dominant and recessive models,  Chi-square tests are performed using the 2x2 table. For the additive model, Cochran-Armitage trend tests are performed for the 2x3 table. However, the non-parametric tests do not adjust for the bias caused by other covariates like sex, age and so forth.</p>
+<p><img width="900" alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/f2b0f941-9405-4ebe-8e89-aef608eb9bb1"></p>
+</div>
+<h2 id="association-testing-basics">Association testing basics</h2>
+<p>For quantitative traits, we can employ a simple linear regression model to test associations:</p>
+<div class="arithmatex">\[ 
+y = G\beta_G + X\beta_X + e
+\]</div>
+<ul>
+<li><span class="arithmatex">\(G\)</span> is the genotype matrix.</li>
+<li><span class="arithmatex">\(\beta_G\)</span> is the effect size for variants.</li>
+<li><span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(\beta_X\)</span> are covariates and their effects.</li>
+<li><span class="arithmatex">\(e\)</span> is the error term.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Interpretation of linear regression</p>
+<p><img width="900" alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/d5092f82-c5b5-4f08-873e-c2942955e634"></p>
+</div>
+<p>For binary traits, we can utilize the logistic regression model to test associations:</p>
+<div class="arithmatex">\[ 
+logit(p) = G\beta_G + X\beta_X + e
+\]</div>
+<div class="admonition info">
+<p class="admonition-title">Linear regression and logistic regression</p>
+<p><img width="900" alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/1b902ad6-db06-44f7-9215-43b13a1a4fea"></p>
+</div>
+<h2 id="file-preparation">File Preparation</h2>
+<p>To perform genome-wide association tests, usually, we need the following files:</p>
+<ul>
+<li><strong>Genotype file</strong> (or dosage file) : usually in PLINK format, VCF format, or BGEN format.</li>
+<li><strong>Phenotype file</strong> : plain text file.</li>
+<li><strong>Covariate file</strong> (optional): plain text file. Commonly used covariates include age, sex, and top Principal Components. </li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Phenotype and covariate files</p>
+<p>Phenotype file for a simulated binary trait; B1 is the phenotype name; 1 means the control, 2 means the case.</p>
+<div class="highlight"><span class="filename">1kgeas_binary.txt</span><pre><span></span><code>FID IID B1
+HG00403 HG00403 1
+HG00404 HG00404 2
+HG00406 HG00406 1
+HG00407 HG00407 1
+HG00409 HG00409 2
+HG00410 HG00410 2
+HG00419 HG00419 1
+HG00421 HG00421 1
+HG00422 HG00422 1
+
+Covariate file (only top PCs calculated in the previous PCA section)
+
+```txt title=&quot;plink_results_projected.sscore&quot;
+#FID    IID     ALLELE_CT       NAMED_ALLELE_DOSAGE_SUM PC1_AVG PC2_AVG PC3_AVG PC4_AVG PC5_AVG PC6_AVG PC7_AVG PC8_AVGPC9_AVG  PC10_AVG
+HG00403 HG00403 390256  390256  0.00290265      -0.0248649      -0.0100407      0.00957595      0.00694056      0.00222996      0.00823028      0.00116497      -0.00334937     0.00434627
+HG00404 HG00404 390696  390696  -0.000141221    -0.027965       -0.025389       -0.00582553     -0.00274711     -0.00657958     0.0113769       -0.00778919     -0.0159685      0.0180678
+HG00406 HG00406 388524  388524  0.00707397      -0.0315445      0.00437013      -0.00126195     -0.0114938      0.00538932      -0.00619657     -0.00454686     0.000969112     -0.00217617
+HG00407 HG00407 388808  388808  0.00683977      -0.025073       0.00652723      0.00679731      -0.0116001      0.0102403       0.0139674       -0.00621948     -0.013797       0.00827744
+HG00409 HG00409 391646  391646  0.000398695     -0.0290334      0.0189352       -0.00135996     0.0290464       -0.00941851     -0.0171911      0.01293 -0.0252628      0.0230819
+HG00410 HG00410 391600  391600  0.00277094      -0.0280021      0.0209991       -0.00799089     0.0318043       0.00283456      -0.0315157      0.000978664     -0.0133768      0.0356721
+HG00419 HG00419 387118  387118  0.00684154      -0.0326244      -0.00237159     0.0167284       -0.0119684      0.00795149      -0.0144241      -0.00716183     -0.0115059      0.0038652
+HG00421 HG00421 387720  387720  0.00157095      -0.0338115      0.00690542      0.0121058       0.00111448      -0.00531714     -0.00175494     0.00118513      -0.00391494     0.00414682
+HG00422 HG00422 387466  387466  0.00439167      -0.0332386      -0.000741482    0.0124843       -0.00362885     0.00342491      -0.0073205      -0.00939123     0.010718        0.00360906
+</code></pre></div>
+</div>
+<h2 id="association-tests-using-plink">Association tests using PLINK</h2>
+<p>Please check https://www.cog-genomics.org/plink/2.0/assoc for more details.</p>
+<p>We will perform logistic regression with firth correction for a simulated binary trait under the additive model using the 1KG East Asian individuals.</p>
+<div class="admonition note">
+<p class="admonition-title">Firth correction</p>
+<p>Adding a penalty term to the log-likelihood function when fitting the logistic model results in less bias. - Firth, David. "Bias reduction of maximum likelihood estimates." Biometrika 80.1 (1993): 27-38.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Quantitative traits</p>
+<p>For quantitative traits, linear regressions will be performed and in this case, we do not need to add <code>firth</code> (since Firth correction is not appliable). </p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Sample codes for association test using plink for binary traits</p>
+<div class="highlight"><pre><span></span><code>genotypeFile=&quot;../04_Data_QC/sample_data.clean&quot; # the clean dataset we generated in previous section
+phenotypeFile=&quot;../01_Dataset/1kgeas_binary.txt&quot; # the phenotype file
+covariateFile=&quot;../05_PCA/plink_results_projected.sscore&quot; # the PC score file
+
+covariateCols=6-10
+colName=&quot;B1&quot;
+threadnum=2
+
+plink2 \
+    --bfile ${genotypeFile} \
+    --pheno ${phenotypeFile} \
+    --pheno-name ${colName} \
+    --maf 0.01 \
+    --covar ${covariateFile} \
+    --covar-col-nums ${covariateCols} \
+    --glm hide-covar firth  firth-residualize single-prec-cc \
+    --threads ${threadnum} \
+    --out 1kgeas
+</code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using the latest version of PLINK2, you need to add <code>firth-residualize single-prec-cc</code> to generate the results. (The algorithm and precision have been changed since 2023 for firth regression)</p>
+</div>
+<p>You will see a similar log like:</p>
+<div class="admonition example">
+<p class="admonition-title">Log</p>
+<div class="highlight"><span class="filename">1kgeas.log</span><pre><span></span><code>PLINK v2.00a5.9LM AVX2 AMD (12 Dec 2023)       www.cog-genomics.org/plink/2.0/
+(C) 2005-2023 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to 1kgeas.log.
+Options in effect:
+--bfile ../04_Data_QC/sample_data.clean
+--covar ../05_PCA/plink_results_projected.sscore
+--covar-col-nums 6-10
+--glm hide-covar firth firth-residualize single-prec-cc
+--maf 0.01
+--out 1kgeas
+--pheno ../01_Dataset/1kgeas_binary.txt
+--pheno-name B1
+--threads 2
+
+Start time: Tue Dec 26 15:52:10 2023
+31934 MiB RAM detected, ~30479 available; reserving 15967 MiB for main
+workspace.
+Using up to 2 compute threads.
+500 samples (0 females, 0 males, 500 ambiguous; 500 founders) loaded from
+../04_Data_QC/sample_data.clean.fam.
+1224104 variants loaded from ../04_Data_QC/sample_data.clean.bim.
+1 binary phenotype loaded (248 cases, 250 controls).
+5 covariates loaded from ../05_PCA/plink_results_projected.sscore.
+Calculating allele frequencies... done.
+95372 variants removed due to allele frequency threshold(s)
+(--maf/--max-maf/--mac/--max-mac).
+1128732 variants remaining after main filters.
+--glm Firth regression on phenotype &#39;B1&#39;: done.
+Results written to 1kgeas.B1.glm.firth .
+End time: Tue Dec 26 15:53:49 2023
+</code></pre></div>
+</div>
+<p>Let's check the first lines of the output:</p>
+<div class="admonition example">
+<p class="admonition-title">Association test results</p>
+<div class="highlight"><span class="filename">1kgeas.B1.glm.firth</span><pre><span></span><code>    #CHROM  POS     ID      REF     ALT     PROVISIONAL_REF?        A1      OMITTED A1_FREQ TEST    OBS_CT  OR      LOG(OR)_SE  Z_STAT  P       ERRCODE
+1       15774   1:15774:G:A     G       A       Y       A       G       0.0282828       ADD     495     NA      NA NA       NA      FIRTH_CONVERGE_FAIL
+1       15777   1:15777:A:G     A       G       Y       G       A       0.0737374       ADD     495     NA      NA NA       NA      FIRTH_CONVERGE_FAIL
+1       57292   1:57292:C:T     C       T       Y       T       C       0.104675        ADD     492     NA      NA NA       NA      FIRTH_CONVERGE_FAIL
+1       77874   1:77874:G:A     G       A       Y       A       G       0.0191532       ADD     496     1.12228 0.46275     0.249299        0.80313 .
+1       87360   1:87360:C:T     C       T       Y       T       C       0.0231388       ADD     497     NA      NA NA       NA      FIRTH_CONVERGE_FAIL
+1       125271  1:125271:C:T    C       T       Y       C       T       0.0292339       ADD     496     1.53387 0.373358    1.1458  0.25188 .
+1       232449  1:232449:G:A    G       A       Y       A       G       0.185484        ADD     496     0.884097   0.168961 -0.729096       0.465943        .
+1       533113  1:533113:A:G    A       G       Y       G       A       0.129555        ADD     494     0.90593 0.196631    -0.50243        0.615365        .
+1       565697  1:565697:A:G    A       G       Y       G       A       0.334677        ADD     496     1.04653 0.15286     0.297509        0.766078        .
+</code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Usually, other options are added to enhance the sumstats</p>
+<ul>
+<li>--keep xxx/kiso2021/for_plink2/unrelated.sample.id    # Because the standard linear     regression does not account for the relatedness, the kinship-pruned samples in last steps are suggested.</li>
+<li>--mach-r2-filter 0.7 2.0  # It allows to use only the variants passed an (MaCH)Rsq filter.  NOTE: when pgen file is used, the upper boundary should be 2.</li>
+<li>--glm <strong>cols=+a1freq,+machr2</strong> firth-fallback <strong>omit-ref</strong>    # The <code>cols=</code> requests the  following columns in the sumstats: here are allele1 frequency and (MaCH)Rsq, <code>firth-fallback</code>     will test the common variants without firth correction, which could improve the speed,     <code>omit-ref</code> will force the ALT==A1==effect allele, otherwise the minor allele would be tested     (see the above result, which ALT may not equal A1).</li>
+<li>--covar-variance-standardize  # To normalize the covariates which may at a huge scale, like     AGE**AGE.</li>
+<li>--covar-name AGE SEX PC1-PC20 # Instead of setting the index of columns, directly specify the     column name.</li>
+</ul>
+</div>
+<h2 id="genomic-control">Genomic control</h2>
+<p>Genomic control (GC) is a basic method for controlling for confounding factors including population stratification.</p>
+<p>We will calculate the genomic control factor (lambda GC) to evaluate the inflation. The genomic control factor is calculated by dividing the <strong>median of observed Chi square statistics</strong> by the <strong>median of Chi square distribution with the degree of freedom being 1</strong> (which is approximately 0.455).</p>
+<div class="arithmatex">\[ 
+\lambda_{GC} = {median(\chi^{2}_{observed}) \over median(\chi^{2}_1)} 
+\]</div>
+<p>Then, we can used the genomic control factor to correct observed Chi suqare statistics.</p>
+<div class="arithmatex">\[ 
+\chi^{2}_{corrected} = {\chi^{2}_{observed} \over \lambda_{GC}} 
+\]</div>
+<p>Genomic inflation is based on the idea that most of the variants are not associated, thus no deviation between the observed and expected Chi square distribution, except the spikes at the end. However, if the trait is highly polygenic, this assumption may be violated.</p>
+<p>Reference: Devlin, B., &amp; Roeder, K. (1999). Genomic control for association studies. Biometrics, 55(4), 997-1004.</p>
+<h2 id="significant-loci">Significant loci</h2>
+<p>Please check <a href="https://cloufield.github.io/GWASTutorial/Visualization/">Visualization using gwaslab</a></p>
+<p>Loci that reached genome-wide significance threshold (P value &lt; 5e-8) :
+<div class="highlight"><pre><span></span><code>SNPID   CHR POS EA  NEA EAF SE  Z   P   OR  N   STATUS  REF ALT
+1:167562605:G:A 1   167562605   A   G   0.391481    0.159645    7.69462 1.419150e-14    3.415780    493 9999999 G   A
+2:55513738:C:T  2   55513738    C   T   0.376008    0.153159    -7.96244    1.686760e-15    0.295373    496 9999999 C   T
+7:134368632:T:G 7   134368632   G   T   0.138105    0.225526    6.89025 5.569440e-12    4.730010    496 9999999 T   G
+20:42758834:T:C 20  42758834    T   C   0.227273    0.184323    -7.76902    7.909780e-15    0.238829    495 9999999 T   C
+</code></pre></div></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is just to show the analysis pipeline and data format. The trait was simulated under an unreal condition (effect sizes are extremely large) so the result is meaningless here.   </p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Allele frequency and Effect size</p>
+<p><img width="700" alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/d5133405-290c-4436-b61e-60f8a750f194"></p>
+</div>
+<h2 id="visualization">Visualization</h2>
+<p>To visualize the sumstats, we will create the Manhattan plot, QQ plot and regional plot.</p>
+<p>Please check for codes : <a href="https://cloufield.github.io/GWASTutorial/Visualization/">Visualization using gwaslab</a></p>
+<p><img alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/40ad5aff-5ac5-4cd0-b9c2-077c0ce20e46" /></p>
+<h3 id="manhattan-plot">Manhattan plot</h3>
+<p>Manhattan plot is the most classic visualization of GWAS summary statistics. It is a form of scatter plot. Each dot represents the test result for a variant. variants are sorted by their genome coordinates and are aligned along the X axis. Y axis shows the -log10(P value) for tests of variants in GWAS. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This kind of plot was named after Manhattan in New York City since it resembles the Manhattan skyline.   </p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">A real Manhattan plot</p>
+<p><img width="686" alt="image" src="https://user-images.githubusercontent.com/40289485/209780549-54a24fdd-485b-4875-8f40-d6812eb644fe.png">
+I took this photo in 2020 just before the COVID-19 pandemic. It was a cloudy and misty day. Those birds formed a significance threshold line. And the skyscrapers above that line resembled the significant signals in your GWAS.  I believe you could easily get how the GWAS Manhattan plot was named. </p>
+</div>
+<p>Data we need from sumstats to create Manhattan plots:</p>
+<ul>
+<li>Chromosome </li>
+<li>Basepair position</li>
+<li>P value or -log10(P)</li>
+</ul>
+<div class="admonition tips">
+<p class="admonition-title">Steps to create Manhattan plot</p>
+<ol>
+<li>sort the variants by genome coordinates.</li>
+<li>map the genome coordinates of variants to the x axis.</li>
+<li>convert P value to -log10(P).</li>
+<li>create the scatter plot.</li>
+</ol>
+</div>
+<h3 id="quantile-quantile-plot">Quantile-quantile plot</h3>
+<p>Quantile-quantile plot (also known as Q-Q plot), is commonly used to compare an observed distribution with its expected distribution. For a specific point (x,y) on Q-Q plot, its y coordinate corresponds to one of the quantiles of the observed distribution, while its x coordinate corresponds to the same quantile of the expected distribution.</p>
+<p>Quantile-quantile plot is used to check if there is any significant inflation in P value distribution, which usually indicates population stratification or cryptic relatedness. </p>
+<p>Data we need from sumstats to create the Manhattan plot:</p>
+<ul>
+<li>P value or -log10(P)</li>
+</ul>
+<div class="admonition tips">
+<p class="admonition-title">Steps to create Q-Q plot</p>
+<p>Suppose we have <code>n</code> variants in our sumstats,</p>
+<ol>
+<li>convert the <code>n</code> P value to -log10(P).</li>
+<li>sort the -log10(P) values in asending order.</li>
+<li>get <code>n</code> numbers from <code>(0,1)</code> with equal intervals.</li>
+<li>convert the <code>n</code> numbers to -log10(P) and sort in ascending order.</li>
+<li>create scatter plot using the sorted -log10(P) of sumstats as Y and sorted -log10(P) we generated as X.</li>
+</ol>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The expected distribution of P value is a Uniform distribution from 0 to 1.</p>
+<div class="arithmatex">\[P_{expected} \sim U(0,1)\]</div>
+</div>
+<h3 id="regional-plot">Regional plot</h3>
+<p>Manhattan plot is very useful to check the overview of our sumstats. But if we want to check a specific genomic locus, we need a plot with finer resolution. This kind of plot is called a regional plot. It is basically the Manhattan plot of only a small region on the genome, with points colored by its LD r2 with the lead variant in this region.</p>
+<p>Such a plot is especially helpful to understand the signal and loci, e.g., LD structure, independent signals, and genes.</p>
+<p>The regional plot for the loci of 2:55513738:C:T. </p>
+<p>Please check <a href="https://cloufield.github.io/GWASTutorial/Visualization/">Visualization using gwaslab</a></p>
+<p><img alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/2aacd0b4-4a4a-485b-97bd-8548679f19e0" /></p>
+<h3 id="gwas-ssf">GWAS-SSF</h3>
+<p>To standardize the format of GWAS summary statistics for sharing, GWAS-SSF format was proposed in 2022. This format is now used as the standard format for GWAS Catalog.</p>
+<p>GWAS-SSF consists of :</p>
+<ol>
+<li>a tab-separated data file with well-defined fields (shown in the following figure)</li>
+<li>an accompanying metadata file describing the study (such as sample ancestry, genotyping method, md5sum, and so forth)</li>
+</ol>
+<div class="admonition example">
+<p class="admonition-title">Schematic representation of GWAS-SSF data file</p>
+<p><img width="800" alt="image" src="https://github.com/Cloufield/GWASTutorial/assets/40289485/9c6526ec-0742-426a-83e5-8134e37078c2"></p>
+</div>
+<div class="admonition quote">
+<p class="admonition-title">GWAS-SSF</p>
+<p>Hayhurst, J., Buniello, A., Harris, L., Mosaku, A., Chang, C., Gignoux, C. R., ... &amp; Barroso, I. (2022). A community driven GWAS summary statistics standard. bioRxiv, 2022-07.</p>
+</div>
+<p>For details, please check:</p>
+<ul>
+<li><a href="https://github.com/EBISPOT/gwas-summary-statistics-standard">https://github.com/EBISPOT/gwas-summary-statistics-standard</a></li>
+<li><a href="https://www.ebi.ac.uk/gwas/docs/summary-statistics-format">https://www.ebi.ac.uk/gwas/docs/summary-statistics-format</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      GWASTutorial is licensed under the MIT license
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.top", "navigation.tracking", "navigation.path"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>
